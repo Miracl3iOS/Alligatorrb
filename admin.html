@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Админка — настройки сайта</title>
+<style>
+:root{
+  --bg:#f0f0f3; --card:#f7f7fb; --ink:#2f2f36;
+  --shadow:5px 5px 10px #cfcfd6, -5px -5px 10px #ffffff;
+  --inset:inset 5px 5px 10px #cfcfd6, inset -5px -5px 10px #ffffff;
+  --maxw:560px;
+}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial;
+  -webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;padding:18px}
+.card{width:min(100%,var(--maxw));background:var(--card);box-shadow:var(--shadow);border-radius:20px;padding:16px}
+h1{margin:6px 0 14px;font-weight:900;font-size:22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+label{font-size:12px;font-weight:800;color:#4a4b54}
+input[type="text"], input[type="url"], input[type="password"]{
+  width:100%;box-sizing:border-box;background:#fff;border:none;border-radius:12px;padding:10px 12px;
+  box-shadow:var(--shadow);font-weight:700
+}
+fieldset{border:none;margin:0 0 16px;padding:12px;border-radius:16px;background:#fff;box-shadow:var(--shadow)}
+legend{font-weight:900;padding:0 6px}
+.actions{display:flex;gap:10px;justify-content:flex-end}
+.btn{appearance:none;border:none;border-radius:12px;padding:10px 14px;font-weight:900;cursor:pointer;box-shadow:var(--shadow)}
+.btn.save{background:linear-gradient(135deg,#099268 0%,#12b886 50%,#2fefb5 100%);color:#111;border:1px solid #000}
+.btn.reset{background:#111;color:#fff}
+.notice{font-size:12px;color:#666;margin-top:8px}
+.hidden{display:none}
+.login{display:grid;gap:10px}
+.center{display:flex;justify-content:center;margin-top:8px}
+small{color:#6a6b73}
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="loginBox" class="login">
+    <h1>Вход в админку</h1>
+    <div class="row">
+      <div>
+        <label>Логин</label>
+        <input id="login" type="text" placeholder="admin" autocomplete="username">
+      </div>
+      <div>
+        <label>Пароль</label>
+        <input id="password" type="password" placeholder="changeme" autocomplete="current-password">
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn save" id="doLogin">Войти</button>
+    </div>
+    <div class="notice">По умолчанию: <b>admin / changeme</b>. Поменяйте ниже в коде (ищите <code>VALID_USER</code>/<code>VALID_PASS</code>).</div>
+  </div>
+
+  <div id="adminBox" class="hidden">
+    <h1>Настройки сайта</h1>
+
+    <fieldset>
+      <legend>Грид-кнопки (главная)</legend>
+      <div class="grid" id="buttonsGrid"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Промо «Крутить» / Баннер «Работа»</legend>
+      <div class="row">
+        <div>
+          <label>Ссылка «КРУТИТЬ» (fortune)</label>
+          <input type="url" id="promo_spinHref" placeholder="fortune.html">
+        </div>
+        <div>
+          <label>Ссылка баннера «Работа»</label>
+          <input type="url" id="job_href" placeholder="calc.html">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Заголовок баннера</label>
+          <input type="text" id="job_title" placeholder="РАБОТА — ЛЕГКИЕ ДЕНЬГИ 🥷">
+        </div>
+        <div>
+          <label>Подзаголовок баннера</label>
+          <input type="text" id="job_sub" placeholder="1000₽ за штуку · начинай прямо сейчас">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Меню (drawer)</legend>
+      <div class="row">
+        <div>
+          <label>Главная — текст</label>
+          <input type="text" id="menu_home_label" placeholder="Главная">
+        </div>
+        <div>
+          <label>Главная — ссылка</label>
+          <input type="url" id="menu_home_href" placeholder="index.html">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Колесо — текст</label>
+          <input type="text" id="menu_fortune_label" placeholder="Колесо фортуны">
+        </div>
+        <div>
+          <label>Колесо — ссылка</label>
+          <input type="url" id="menu_fortune_href" placeholder="fortune.html">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Калькулятор — текст</label>
+          <input type="text" id="menu_calc_label" placeholder="Калькулятор дохода">
+        </div>
+        <div>
+          <label>Калькулятор — ссылка</label>
+          <input type="url" id="menu_calc_href" placeholder="calc.html">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Вакансии — текст</label>
+          <input type="text" id="menu_jobs_label" placeholder="Вакансии">
+        </div>
+        <div>
+          <label>Вакансии — ссылка</label>
+          <input type="url" id="menu_jobs_href" placeholder="jobs.html">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Калькулятор — верхние кнопки</legend>
+      <div class="row">
+        <div>
+          <label>«Вакансии» — ссылка</label>
+          <input type="url" id="calc_vacancies" placeholder="jobs.html">
+        </div>
+        <div>
+          <label>«Начать работу» — ссылка</label>
+          <input type="url" id="calc_start" placeholder="https://t.me/">
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button class="btn reset" id="resetCfg">Сбросить к дефолту</button>
+      <button class="btn save" id="saveCfg">Сохранить</button>
+    </div>
+    <div class="center"><small>Все данные хранятся в вашем браузере (localStorage).</small></div>
+  </div>
+</div>
+
+<script>
+/* ==== «Авторизация» (клиентская, без сервера) ==== */
+const VALID_USER = "admin";
+const VALID_PASS = "changeme";
+
+function getCfg(){
+  try{
+    const raw = localStorage.getItem("siteConfigV1");
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveCfg(obj){
+  localStorage.setItem("siteConfigV1", JSON.stringify(obj));
+}
+function deepMerge(a,b){
+  for(const k in b){
+    if(b[k] && typeof b[k]==="object" && !Array.isArray(b[k])){
+      a[k] = deepMerge(a[k]||{}, b[k]);
+    }else{
+      a[k] = b[k];
+    }
+  }
+  return a;
+}
+const DEFAULT_CONFIG = {
+  buttons: {
+    operator:{label:"Оператор",href:"https://t.me/"},
+    chats:{label:"Чаты",href:"https://t.me/"},
+    reviews:{label:"Отзывы",href:"https://t.me/"},
+    autosales:{label:"Бот автопродаж",href:"https://t.me/"},
+    channel:{label:"Канал",href:"https://t.me/"},
+    exchanger:{label:"Обменник",href:"https://t.me/"},
+    jobs:{label:"Вакансии",href:"jobs.html"},
+    calculator:{label:"Калькулятор",href:"calc.html"}
+  },
+  promo:{ spinHref:"fortune.html" },
+  jobBanner:{ title:"РАБОТА — ЛЕГКИЕ ДЕНЬГИ 🥷", sub:"1000₽ за штуку · начинай прямо сейчас", href:"calc.html" },
+  menu:{
+    home:{label:"Главная",href:"index.html"},
+    fortune:{label:"Колесо фортуны",href:"fortune.html"},
+    calc:{label:"Калькулятор дохода",href:"calc.html"},
+    jobs:{label:"Вакансии",href:"jobs.html"}
+  },
+  calcTop:{ vacanciesHref:"jobs.html", startHref:"https://t.me/" }
+};
+
+const loginBox = document.getElementById("loginBox");
+const adminBox = document.getElementById("adminBox");
+document.getElementById("doLogin").onclick = ()=>{
+  const u = document.getElementById("login").value.trim();
+  const p = document.getElementById("password").value;
+  if(u===VALID_USER && p===VALID_PASS){
+    loginBox.classList.add("hidden");
+    adminBox.classList.remove("hidden");
+    renderForm();
+  }else{
+    alert("Неверный логин или пароль");
+  }
+};
+
+/* ==== ФОРМА ==== */
+const btnGrid = document.getElementById("buttonsGrid");
+const BUTTON_KEYS = ["operator","chats","reviews","autosales","channel","exchanger","jobs","calculator"];
+
+function renderForm(){
+  const cfg = deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), getCfg());
+
+  // 1) Грид кнопок
+  btnGrid.innerHTML="";
+  BUTTON_KEYS.forEach(key=>{
+    const wrap = document.createElement("div");
+    wrap.className = "row";
+    wrap.innerHTML = `
+      <div>
+        <label>${key} — текст</label>
+        <input type="text" id="btn_${key}_label">
+      </div>
+      <div>
+        <label>${key} — ссылка</label>
+        <input type="url" id="btn_${key}_href">
+      </div>`;
+    btnGrid.appendChild(wrap);
+    document.getElementById(`btn_${key}_label`).value = cfg.buttons[key].label || "";
+    document.getElementById(`btn_${key}_href`).value  = cfg.buttons[key].href  || "";
+  });
+
+  // 2) Промо/Работа
+  document.getElementById("promo_spinHref").value = cfg.promo.spinHref || "";
+  document.getElementById("job_href").value       = cfg.jobBanner.href || "";
+  document.getElementById("job_title").value      = cfg.jobBanner.title || "";
+  document.getElementById("job_sub").value        = cfg.jobBanner.sub || "";
+
+  // 3) Меню
+  document.getElementById("menu_home_label").value    = cfg.menu.home.label || "";
+  document.getElementById("menu_home_href").value     = cfg.menu.home.href || "";
+  document.getElementById("menu_fortune_label").value = cfg.menu.fortune.label || "";
+  document.getElementById("menu_fortune_href").value  = cfg.menu.fortune.href || "";
+  document.getElementById("menu_calc_label").value    = cfg.menu.calc.label || "";
+  document.getElementById("menu_calc_href").value     = cfg.menu.calc.href || "";
+  document.getElementById("menu_jobs_label").value    = cfg.menu.jobs.label || "";
+  document.getElementById("menu_jobs_href").value     = cfg.menu.jobs.href || "";
+
+  // 4) Калькулятор top
+  document.getElementById("calc_vacancies").value = cfg.calcTop.vacanciesHref || "";
+  document.getElementById("calc_start").value     = cfg.calcTop.startHref || "";
+}
+
+document.getElementById("saveCfg").onclick = ()=>{
+  const next = deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), getCfg());
+
+  // grid buttons
+  BUTTON_KEYS.forEach(key=>{
+    next.buttons[key].label = document.getElementById(`btn_${key}_label`).value.trim();
+    next.buttons[key].href  = document.getElementById(`btn_${key}_href`).value.trim();
+  });
+
+  // promo/job
+  next.promo.spinHref      = document.getElementById("promo_spinHref").value.trim();
+  next.jobBanner.href      = document.getElementById("job_href").value.trim();
+  next.jobBanner.title     = document.getElementById("job_title").value.trim();
+  next.jobBanner.sub       = document.getElementById("job_sub").value.trim();
+
+  // menu
+  next.menu.home.label     = document.getElementById("menu_home_label").value.trim();
+  next.menu.home.href      = document.getElementById("menu_home_href").value.trim();
+  next.menu.fortune.label  = document.getElementById("menu_fortune_label").value.trim();
+  next.menu.fortune.href   = document.getElementById("menu_fortune_href").value.trim();
+  next.menu.calc.label     = document.getElementById("menu_calc_label").value.trim();
+  next.menu.calc.href      = document.getElementById("menu_calc_href").value.trim();
+  next.menu.jobs.label     = document.getElementById("menu_jobs_label").value.trim();
+  next.menu.jobs.href      = document.getElementById("menu_jobs_href").value.trim();
+
+  // calc top
+  next.calcTop.vacanciesHref = document.getElementById("calc_vacancies").value.trim();
+  next.calcTop.startHref     = document.getElementById("calc_start").value.trim();
+
+  saveCfg(next);
+  alert("Сохранено! Обновите страницы сайта (F5).");
+};
+
+document.getElementById("resetCfg").onclick = ()=>{
+  if(confirm("Сбросить настройки к дефолтным?")){
+    saveCfg(DEFAULT_CONFIG);
+    renderForm();
+  }
+};
+</script>
+</body>
+</html>
