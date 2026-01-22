@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>ALLIGATORRB</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* COLORS (твои) */
+      --bg: #1A1411;
+      --text: #E6E6E6;
+      --muted: #9CA3AF;
+      --heading: #F5F5F5;
+
+      --gold1:#D4AF37;
+      --gold2:#C9A24D;
+      --goldHover:#B8933E;
+      --goldText:#0F1115;
+
+      /* MEDIA (просто меняй пути) */
+      --hero-media: url("hero.gif"); /* верхняя гифка с крокодилом */
+      --work-media: url("work.gif"); /* нижняя гифка-баннер (белый крокодил) */
+
+      /* SIZES */
+      --radius-xl: 26px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+
+      /* SHADOWS (под тёмный неоморфизм) */
+      --shadowA: rgba(0,0,0,.65);
+      --shadowB: rgba(255,255,255,.06);
+      --glowGold: rgba(212,175,55,.18);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Poppins,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      background:
+        radial-gradient(1100px 700px at 15% 0%, rgba(212,175,55,.08), transparent 55%),
+        radial-gradient(900px 650px at 90% 10%, rgba(255,255,255,.05), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+      display:grid;
+      place-items:center;
+      padding:18px;
+    }
+
+    a,button{font:inherit;color:inherit}
+    button{border:0;background:transparent;cursor:pointer}
+    a{text-decoration:none}
+
+    /* ОБОЛОЧКА */
+    .shell{
+      width:min(430px, 100%);
+      min-height:calc(100dvh - 36px);
+      border-radius:var(--radius-xl);
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0) 35%),
+        rgba(255,255,255,.02);
+      box-shadow:
+        16px 16px 40px var(--shadowA),
+        -10px -10px 26px var(--shadowB);
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .content{
+      padding:16px 16px 18px;
+    }
+
+    /* HERO MEDIA (верхнее поле под гифку) */
+    .hero{
+      position:relative;
+      border-radius:var(--radius-xl);
+      overflow:hidden;
+      box-shadow:
+        14px 14px 34px var(--shadowA),
+        -10px -10px 24px var(--shadowB);
+      border:1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.02);
+    }
+
+    /* 16:9 адаптивный блок */
+    .heroMedia{
+      width:100%;
+      aspect-ratio: 16 / 9;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.35)),
+        var(--hero-media);
+      background-size:cover;
+      background-position:center;
+      transform: translateZ(0);
+    }
+
+    /* небольшая “возможность добавить баннер” — бейдж поверх */
+    .heroBadge{
+      position:absolute;
+      left:14px;
+      top:14px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      letter-spacing:.3px;
+      color:var(--goldText);
+      background: linear-gradient(180deg, var(--gold1), var(--gold2));
+      box-shadow: 0 12px 28px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.10) inset;
+      user-select:none;
+    }
+
+    /* МЕНЮ справа сверху поверх гифки */
+    .menuBtn{
+      position:absolute;
+      right:14px;
+      top:14px;
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background: rgba(20,16,14,.55);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: 10px 10px 26px rgba(0,0,0,.55), -8px -8px 18px rgba(255,255,255,.05);
+      transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+    }
+    .menuBtn:active{
+      transform: translateY(1px) scale(.98);
+      box-shadow: inset 8px 8px 18px rgba(0,0,0,.55), inset -8px -8px 18px rgba(255,255,255,.05);
+    }
+    .menuIcon{
+      width:22px;height:22px;
+      opacity:.95;
+      color: #e9d7a5;
+    }
+
+    /* TITLE */
+    .titleBlock{
+      padding:16px 6px 12px;
+      text-align:center;
+    }
+    .title{
+      font-size: clamp(30px, 7.2vw, 44px);
+      line-height:1.0;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: transparent;
+      background: linear-gradient(90deg, #fff2c5, var(--gold1), #f4e8c0, var(--gold2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      text-shadow: 0 0 18px rgba(212,175,55,.08);
+    }
+    .subtitle{
+      margin-top:10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height:1.45;
+      max-width: 32ch;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    /* WORK BANNER BUTTON (нижняя гифка, высота ~ -20%) */
+    .workBanner{
+      margin-top: 8px;
+      border-radius: var(--radius-xl);
+      overflow:hidden;
+      position:relative;
+      display:block;
+      box-shadow:
+        14px 14px 34px var(--shadowA),
+        -10px -10px 24px var(--shadowB);
+      border:1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.02);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .workBanner:active{
+      transform: translateY(1px) scale(.99);
+      box-shadow: inset 10px 10px 22px rgba(0,0,0,.60), inset -10px -10px 22px rgba(255,255,255,.05);
+    }
+
+    .workMedia{
+      width:100%;
+      /* меньше верхнего примерно на 20%: 16:9 = 56.25% высоты, тут делаем ниже */
+      aspect-ratio: 16 / 7; /* визуально ниже/плосче */
+      background:
+        radial-gradient(600px 240px at 40% 20%, rgba(212,175,55,.14), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.45)),
+        var(--work-media);
+      background-size:cover;
+      background-position:center;
+    }
+
+    /* надпись "РАБОТА" поверх баннера */
+    .workLabel{
+      position:absolute;
+      left:16px;
+      bottom:14px;
+      padding:10px 14px;
+      border-radius: 14px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      color: var(--goldText);
+      background: linear-gradient(180deg, var(--gold1), var(--gold2));
+      box-shadow: 0 16px 34px rgba(0,0,0,.40), 0 0 0 1px rgba(255,255,255,.10) inset;
+      user-select:none;
+    }
+
+    /* 6 GOLD BUTTONS GRID */
+    .grid{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding-bottom: 8px;
+    }
+
+    .goldBtn{
+      height: 56px;
+      border-radius: 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      letter-spacing: .6px;
+      color: var(--goldText);
+      background: linear-gradient(180deg, var(--gold1), var(--gold2));
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,255,255,.10) inset,
+        0 0 26px var(--glowGold);
+      transition: transform .15s ease, filter .15s ease;
+      border: none; /* обводку НЕ добавляем */
+    }
+    .goldBtn:active{
+      transform: translateY(1px) scale(.99);
+      filter: brightness(.96);
+    }
+    @media (hover:hover){
+      .goldBtn:hover{filter: brightness(.98);}
+      .workBanner:hover{transform: translateY(-1px);}
+    }
+
+    /* FOOTER */
+    .foot{
+      text-align:center;
+      padding:14px 12px 16px;
+      color: rgba(156,163,175,.9);
+      font-size: 12px;
+    }
+    .foot a{
+      color: rgba(230,230,230,.9);
+      font-weight:900;
+      border-bottom:1px dashed rgba(201,162,77,.55);
+    }
+
+    /* SHEET MENU */
+    .sheetWrap{
+      position:fixed;
+      inset:0;
+      display:none;
+      z-index:50;
+    }
+    .sheetWrap.active{display:block}
+    .shade{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+    }
+    .sheet{
+      position:absolute;
+      right:0;
+      top:0;
+      height:100%;
+      width:min(86vw, 340px);
+      background: rgba(24,19,16,.92);
+      border-left: 1px solid rgba(255,255,255,.08);
+      box-shadow:-18px 0 40px rgba(0,0,0,.55);
+      padding:18px;
+      transform: translateX(100%);
+      transition: transform .22s ease-out;
+    }
+    .sheetWrap.active .sheet{transform:none}
+    .sheet h2{
+      color: var(--heading);
+      font-size: 18px;
+      font-weight: 900;
+      margin: 6px 0 14px;
+      letter-spacing:.3px;
+    }
+    .sheet a{
+      display:block;
+      padding:14px 14px;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      box-shadow: 12px 12px 26px rgba(0,0,0,.55), -8px -8px 18px rgba(255,255,255,.04);
+      transition: transform .15s ease;
+    }
+    .sheet a:active{transform: translateY(1px);}
+
+  </style>
+</head>
+
+<body>
+  <main class="shell">
+
+    <!-- HERO -->
+    <section class="content">
+      <div class="hero">
+        <!-- опциональный баннер-бейдж (можешь удалить или поменять текст) -->
+        <div class="heroBadge">NEW • BANNER</div>
+
+        <button class="menuBtn" id="openMenu" aria-label="Открыть меню">
+          <svg class="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+
+        <div class="heroMedia" aria-label="Верхняя гифка"></div>
+      </div>
+
+      <!-- TITLE -->
+      <div class="titleBlock">
+        <div class="title">ALLIGATORRB</div>
+        <div class="subtitle">магазинчик бла бла бла — покупайте больше цифровых товаров</div>
+      </div>
+
+      <!-- WORK GIF BANNER BUTTON -->
+      <a class="workBanner" href="#" aria-label="Работа (баннер-кнопка)">
+        <div class="workMedia"></div>
+        <div class="workLabel">РАБОТА</div>
+      </a>
+
+      <!-- 6 BUTTONS -->
+      <div class="grid" aria-label="Навигация">
+        <a class="goldBtn" href="#">КАНАЛ</a>
+        <a class="goldBtn" href="#">ЧАТ</a>
+        <a class="goldBtn" href="#">ВАКАНСИИ</a>
+        <a class="goldBtn" href="#">СОЗДАТЕЛЬ</a>
+        <a class="goldBtn" href="#">БОТ</a>
+        <a class="goldBtn" href="#">ПОМОЩНИК</a>
+      </div>
+
+      <footer class="foot">
+        Сделано с 🔥 — <a href="#" target="_blank" rel="noopener">твоя ссылка</a>
+      </footer>
+    </section>
+  </main>
+
+  <!-- MENU SHEET -->
+  <div class="sheetWrap" id="sheet">
+    <div class="shade" id="closeSheet"></div>
+    <aside class="sheet" role="dialog" aria-label="Меню">
+      <h2>Меню</h2>
+      <a href="#">Главная</a>
+      <a href="#">Работа</a>
+      <a href="#">Контакты</a>
+      <a href="#">Вакансии</a>
+    </aside>
+  </div>
+
+  <script>
+    const sheet = document.getElementById('sheet');
+    document.getElementById('openMenu').onclick = () => sheet.classList.add('active');
+    document.getElementById('closeSheet').onclick = () => sheet.classList.remove('active');
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') sheet.classList.remove('active'); });
+
+    // Быстро поменять гифки без правки CSS:
+    // document.documentElement.style.setProperty('--hero-media', 'url("https://.../hero.gif")');
+    // document.documentElement.style.setProperty('--work-media', 'url("https://.../work.gif")');
+  </script>
+</body>
+</html>
