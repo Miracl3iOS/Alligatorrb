@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>ALLIGATORRB</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --bg:#1A1411;
@@ -19,199 +20,179 @@
   --goldD:#B8933E;
   --goldText:#0F1115;
 
-  /* media */
-  --hero: url("hero.gif");
-  --work: url("work.gif");
-
-  --r-xl:22px;
-  --r-lg:18px;
-  --r-md:14px;
-
   /* меньше теней */
-  --shadow-soft: 0 10px 22px rgba(0,0,0,.40);
-  --shadow-soft2: 0 6px 16px rgba(0,0,0,.30);
+  --shadow:0 10px 22px rgba(0,0,0,.35);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:Poppins,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  background: var(--bg);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
-a,button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;outline:none}
-button{border:0;background:transparent;cursor:pointer}
+a,button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+button{border:0;background:none;cursor:pointer}
+a{text-decoration:none}
 
-/* ---------- TOP HERO (на весь верх экрана) ---------- */
+/* ---------- HERO VIDEO ---------- */
 .hero{
   position:relative;
   width:100%;
-  height:min(56vh, 520px);
-  min-height: 320px;
-  background: var(--hero) center/cover no-repeat;
+  height:min(56vh,520px);
+  min-height:320px;
+  overflow:hidden;
+  background:#000; /* если постер не подгрузился */
+}
+.heroVideo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  pointer-events:none; /* важно: клики проходят */
 }
 .hero::after{
-  /* лёгкая затемнялка, чтобы интерфейс читался */
   content:"";
-  position:absolute; inset:0;
-  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.6));
   pointer-events:none;
 }
 
-/* кнопка меню поверх */
+/* MENU BUTTON */
 .menuBtn{
   position:absolute;
-  top:14px; right:14px;
-  width:46px; height:46px;
+  top:14px;
+  right:14px;
+  width:46px;
+  height:46px;
   border-radius:14px;
   display:grid;
   place-items:center;
-  background: rgba(26,20,17,.55);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-soft2);
+  background:rgba(26,20,17,.6);
+  backdrop-filter:blur(10px);
+  box-shadow:var(--shadow);
+  z-index:5;
 }
-.menuBtn:active{transform: translateY(1px) scale(.98)}
-.menuIcon{width:22px;height:22px;color:var(--goldC);opacity:.95}
+.menuBtn svg{width:22px;height:22px;color:var(--goldC)}
+.menuBtn:active{transform:scale(.96)}
 
 /* ---------- CONTENT ---------- */
 .wrap{
-  width:min(430px, 100%);
-  margin: 0 auto;
-  padding: 16px 16px 26px;
+  width:min(430px,100%);
+  margin:0 auto;
+  padding:18px 16px 28px;
 }
 
-/* заголовок как в твоём старом коде, но “дороже” и жирнее */
 .h1{
   text-align:center;
-  margin-top: 14px;
-  font-size: clamp(30px, 7.2vw, 44px);
-  font-weight: 900;
-  letter-spacing: 1.2px;
-  color: transparent;
-  background: linear-gradient(90deg, #fff6cf, var(--goldA), #f2e8c4, var(--goldB), #fff6cf);
-  background-size: 220% auto;
+  font-size:clamp(30px,7vw,44px);
+  font-weight:900;
+  letter-spacing:1.2px;
+  color:transparent;
+  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+  background-size:220% auto;
   -webkit-background-clip:text;
   background-clip:text;
-  animation: goldFlow 10s linear infinite;
+  animation:goldFlow 10s linear infinite;
 }
-@keyframes goldFlow{
-  0%{background-position:0% 50%}
-  100%{background-position:220% 50%}
-}
+@keyframes goldFlow{to{background-position:220% 50%}}
+
 .lead{
-  margin-top: 10px;
+  margin-top:10px;
   text-align:center;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.45;
-  padding: 0 10px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
 }
 
-/* ---------- WORK BANNER (в 2 раза ниже) ---------- */
+/* ---------- WORK BANNER ---------- */
 .workBanner{
-  margin-top: 16px;
-  display:block;
-  border-radius: var(--r-xl);
-  overflow:hidden;
   position:relative;
-  background: var(--work) center/cover no-repeat;
-  /* ниже примерно в 2 раза */
-  height: 120px;
-  box-shadow: var(--shadow-soft);
+  margin-top:18px;
+  height:120px;
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  background:#000;
+  display:block;
 }
-.workBanner::before{
+.workVideo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  pointer-events:none;
+}
+.workBanner::after{
   content:"";
-  position:absolute; inset:0;
-  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.60));
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.65));
+  pointer-events:none;
 }
 .workTitle{
   position:absolute;
   inset:0;
   display:grid;
   place-items:center;
-  font-weight: 900;
-  letter-spacing: 1px;
-  font-size: 26px;
-  color: transparent;
-  background: linear-gradient(90deg, #fff6cf, var(--goldA), #f2e8c4, var(--goldB), #fff6cf);
-  background-size: 220% auto;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:1px;
+  color:transparent;
+  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+  background-size:220% auto;
   -webkit-background-clip:text;
   background-clip:text;
-  animation: goldFlow 10s linear infinite;
-  text-shadow: 0 10px 26px rgba(0,0,0,.45);
+  animation:goldFlow 10s linear infinite;
+  text-shadow:0 12px 26px rgba(0,0,0,.45);
 }
-.workBanner:active{transform: translateY(1px)}
 
-/* ---------- METALLIC BUTTONS (6 шт, 2 колонки) ---------- */
+/* ---------- METAL BUTTONS ---------- */
 .grid{
-  margin-top: 14px;
+  margin-top:18px;
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-/* “Металл”: несколько слоёв градиента + движущийся блик (shimmer) */
 .metalBtn{
   position:relative;
-  height: 58px;
-  border-radius: 18px;
+  height:58px;
+  border-radius:18px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-weight: 900;
-  letter-spacing: .6px;
-  color: var(--goldText);
-  user-select:none;
-
-  /* базовый металл */
+  font-weight:900;
+  letter-spacing:.6px;
+  color:var(--goldText);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 35%),
-    linear-gradient(120deg,
-      #8b6a1f 0%,
-      var(--goldD) 12%,
-      var(--goldA) 28%,
-      var(--goldC) 40%,
-      var(--goldB) 56%,
-      var(--goldA) 72%,
-      #8b6a1f 100%);
-  box-shadow: var(--shadow-soft2);
+    linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,0) 36%),
+    linear-gradient(120deg,#8b6a1f,var(--goldD),var(--goldA),var(--goldC),var(--goldB),var(--goldA),#8b6a1f);
+  box-shadow:var(--shadow);
   overflow:hidden;
-  border:none; /* без обводки */
+  user-select:none;
 }
-
-/* движущийся блик */
 .metalBtn::after{
   content:"";
   position:absolute;
-  top:-60%;
-  left:-60%;
-  width: 220%;
-  height: 220%;
-  background:
-    linear-gradient(115deg,
-      transparent 0%,
-      rgba(255,255,255,.05) 35%,
-      rgba(255,255,255,.38) 50%,
-      rgba(255,255,255,.06) 65%,
-      transparent 100%);
-  transform: translateX(-35%) rotate(10deg);
-  animation: shimmer 2.8s linear infinite;
-  mix-blend-mode: screen;
+  inset:-60%;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);
+  transform:translateX(-50%) rotate(12deg);
+  animation:shimmer 3s linear infinite;
+  mix-blend-mode:screen;
   pointer-events:none;
 }
-@keyframes shimmer{
-  0%{transform: translateX(-55%) rotate(10deg)}
-  100%{transform: translateX(10%) rotate(10deg)}
-}
+@keyframes shimmer{to{transform:translateX(50%) rotate(12deg)}}
+.metalBtn:active{transform:translateY(1px) scale(.98); filter:brightness(.96)}
 
-.metalBtn:active{
-  transform: translateY(1px) scale(.99);
-  filter: brightness(.97);
-}
-
-/* ---------- SHEET MENU ---------- */
+/* ---------- MENU SHEET ---------- */
 .sheetWrap{
   position:fixed;
   inset:0;
@@ -222,118 +203,179 @@ button{border:0;background:transparent;cursor:pointer}
 .sheetShade{
   position:absolute;
   inset:0;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(6px);
+  background:rgba(0,0,0,.55);
 }
 .sheet{
   position:absolute;
-  right:0; top:0;
+  right:0;
+  top:0;
   height:100%;
-  width: min(86vw, 340px);
-  background: rgba(18,14,12,.92);
-  transform: translateX(100%);
-  transition: transform .22s ease-out;
-  padding: 18px;
+  width:min(86vw,340px);
+  background:rgba(18,14,12,.95);
+  padding:18px;
+  transform:translateX(100%);
+  transition:transform .22s ease-out;
 }
 .sheetWrap.active .sheet{transform:none}
-.sheet h2{
-  color: var(--heading);
-  font-weight: 900;
-  margin: 8px 0 14px;
-  letter-spacing: .3px;
-}
+.sheet h2{color:var(--heading);font-weight:900;margin:8px 0 14px}
 .sheet a{
   display:block;
-  padding: 14px;
-  border-radius: 16px;
-  background: rgba(255,255,255,.04);
-  margin-bottom: 12px;
-  box-shadow: 0 10px 22px rgba(0,0,0,.35);
+  padding:14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.04);
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
 }
-.sheet a:active{transform: translateY(1px)}
 
 .foot{
+  margin-top:18px;
   text-align:center;
-  margin-top: 16px;
-  color: rgba(156,163,175,.9);
-  font-size: 12px;
+  font-size:12px;
+  color:rgba(156,163,175,.9);
 }
 .foot a{
-  color: rgba(230,230,230,.9);
-  font-weight: 900;
+  color:rgba(230,230,230,.9);
+  font-weight:900;
   text-decoration:none;
-  border-bottom: 1px dashed rgba(201,162,77,.55);
+  border-bottom:1px dashed rgba(201,162,77,.55);
+}
+
+/* лёгкий hover только на ПК */
+@media (hover:hover){
+  .metalBtn:hover{filter:brightness(.98)}
+  .workBanner:hover{transform:translateY(-1px)}
 }
 </style>
 </head>
 
 <body>
-  <!-- верхняя гифка на весь верх экрана -->
-  <section class="hero" aria-label="Верхняя гифка">
-    <button class="menuBtn" id="openMenu" aria-label="Открыть меню">
-      <svg class="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
+
+<!-- HERO -->
+<section class="hero">
+  <video
+    class="heroVideo"
+    id="heroVideo"
+    autoplay
+    loop
+    muted
+    playsinline
+    preload="metadata"
+    poster="hero.jpg"
+    disablepictureinpicture
+    controlslist="nodownload noplaybackrate noremoteplayback"
+  >
+    <source src="hero.mp4" type="video/mp4">
+  </video>
+
+  <button class="menuBtn" id="openMenu" aria-label="Открыть меню">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+</section>
+
+<main class="wrap">
+  <div class="h1">ALLIGATORRB</div>
+  <div class="lead">магазинчик бла бла бла — покупайте больше цифровых товаров</div>
+
+  <!-- WORK -->
+  <a class="workBanner" href="#" aria-label="Работа">
+    <video
+      class="workVideo"
+      id="workVideo"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+      poster="work.jpg"
+      disablepictureinpicture
+      controlslist="nodownload noplaybackrate noremoteplayback"
+    >
+      <source src="work.mp4" type="video/mp4">
+    </video>
+    <div class="workTitle">РАБОТА</div>
+  </a>
+
+  <!-- BUTTONS -->
+  <section class="grid" aria-label="Кнопки">
+    <a class="metalBtn" href="#">КАНАЛ</a>
+    <a class="metalBtn" href="#">ЧАТ</a>
+    <a class="metalBtn" href="#">ВАКАНСИИ</a>
+    <a class="metalBtn" href="#">СОЗДАТЕЛЬ</a>
+    <a class="metalBtn" href="#">БОТ</a>
+    <a class="metalBtn" href="#">ПОМОЩНИК</a>
   </section>
 
-  <main class="wrap">
-    <div class="h1">ALLIGATORRB</div>
-    <div class="lead">магазинчик бла бла бла — покупайте больше цифровых товаров</div>
+  <footer class="foot">
+    Сделано — <a href="#">твоя ссылка</a>
+  </footer>
+</main>
 
-    <!-- баннер работа (гифка), ниже в 2 раза по высоте -->
-    <a class="workBanner" href="#" aria-label="Работа">
-      <div class="workTitle">РАБОТА</div>
-    </a>
-
-    <!-- 6 кнопок 2x3, металл -->
-    <section class="grid" aria-label="Кнопки">
-      <a class="metalBtn" href="#">КАНАЛ</a>
-      <a class="metalBtn" href="#">ЧАТ</a>
-      <a class="metalBtn" href="#">ВАКАНСИИ</a>
-      <a class="metalBtn" href="#">СОЗДАТЕЛЬ</a>
-      <a class="metalBtn" href="#">БОТ</a>
-      <a class="metalBtn" href="#">ПОМОЩНИК</a>
-    </section>
-
-    <footer class="foot">
-      Сделано — <a href="#" target="_blank" rel="noopener">твоя ссылка</a>
-    </footer>
-  </main>
-
-  <!-- Шторка меню -->
-  <div class="sheetWrap" id="sheet" aria-hidden="true">
-    <div class="sheetShade" id="closeSheet"></div>
-    <aside class="sheet" role="dialog" aria-label="Меню">
-      <h2>Меню</h2>
-      <a href="#">Главная</a>
-      <a href="#">Работа</a>
-      <a href="#">Контакты</a>
-      <a href="#">Вакансии</a>
-    </aside>
-  </div>
+<!-- MENU -->
+<div class="sheetWrap" id="sheet">
+  <div class="sheetShade" id="closeSheet"></div>
+  <aside class="sheet" role="dialog" aria-label="Меню">
+    <h2>Меню</h2>
+    <a href="#">Главная</a>
+    <a href="#">Работа</a>
+    <a href="#">Контакты</a>
+    <a href="#">Вакансии</a>
+  </aside>
+</div>
 
 <script>
-  const sheet = document.getElementById('sheet');
-  const openBtn = document.getElementById('openMenu');
-  const closeShade = document.getElementById('closeSheet');
+/* ===== MENU ===== */
+const sheet = document.getElementById('sheet');
+document.getElementById('openMenu').onclick = () => sheet.classList.add('active');
+document.getElementById('closeSheet').onclick = () => sheet.classList.remove('active');
+window.addEventListener('keydown', (e) => { if(e.key === 'Escape') sheet.classList.remove('active'); });
 
-  openBtn.addEventListener('click', () => {
-    sheet.classList.add('active');
-    sheet.setAttribute('aria-hidden','false');
-  });
+/* ===== VIDEO AUTOPLAY HARDENING (iOS/Android/PC) ===== */
+const vids = [
+  document.getElementById('heroVideo'),
+  document.getElementById('workVideo')
+].filter(Boolean);
 
-  closeShade.addEventListener('click', () => {
-    sheet.classList.remove('active');
-    sheet.setAttribute('aria-hidden','true');
-  });
+function tryPlay(v){
+  if(!v) return;
+  // гарантируем нужные флаги
+  v.muted = true;
+  v.playsInline = true;
 
-  window.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape'){
-      sheet.classList.remove('active');
-      sheet.setAttribute('aria-hidden','true');
-    }
+  const p = v.play();
+  if(p && typeof p.catch === 'function'){
+    p.catch(()=>{ /* если браузер запретил — попробуем позже */ });
+  }
+}
+
+function kickAll(){
+  vids.forEach(v => tryPlay(v));
+}
+
+/* 1) сразу */
+kickAll();
+
+/* 2) после готовности страницы */
+window.addEventListener('load', kickAll);
+
+/* 3) на первый тап/скролл (часто нужно на Android) */
+['touchstart','pointerdown','click','scroll'].forEach(evt=>{
+  window.addEventListener(evt, kickAll, { once:true, passive:true });
+});
+
+/* 4) когда вкладка возвращается */
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden) kickAll();
+});
+
+/* 5) если видео внезапно остановилось — поднимем */
+vids.forEach(v=>{
+  v.addEventListener('pause', ()=>{
+    if(!document.hidden) tryPlay(v);
   });
+});
 </script>
+
 </body>
 </html>
