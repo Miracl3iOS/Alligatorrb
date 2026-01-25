@@ -8,44 +8,60 @@
 
 <style>
 :root{
-  --bg:#1A1411;
+  --text:#2A2A2A;
+  --text2:#1C1C1C;
+  --muted:#8E96A3;
 
-  --text:#E6E6E6;
-  --muted:#9CA3AF;
-  --heading:#F5F5F5;
+  /* ЯРКИЙ платиново-серебряный фон */
+  --bgA:#FFFFFF;
+  --bgB:#F2F4F8;
+  --bgC:#E3E8F1;
+  --bgD:#D2DAE6;
 
-  --goldA:#D4AF37;
-  --goldB:#C9A24D;
-  --goldC:#F4E7B7;
-  --goldD:#B8933E;
-  --goldText:#0F1115;
+  /* Платина для кнопок */
+  --plat1:#E9EDF5;
+  --plat2:#C9D1DD;
+  --plat3:#FFFFFF;
 
-  /* меньше теней */
-  --shadow:0 10px 22px rgba(0,0,0,.35);
+  /* мягкие небольшие тени */
+  --shadow: 6px 6px 14px rgba(160,170,185,.22),
+            -6px -6px 14px rgba(255,255,255,.92);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   font-family:Poppins,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
-  background:var(--bg);
   color:var(--text);
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+
+  background:linear-gradient(135deg,
+    var(--bgA) 0%,
+    var(--bgB) 28%,
+    var(--bgC) 62%,
+    var(--bgD) 100%
+  );
 }
+
 a,button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
 button{border:0;background:none;cursor:pointer}
 a{text-decoration:none}
 
-/* ---------- HERO VIDEO ---------- */
+/* ---------- HERO VIDEO (СКРУГЛИЛ УГЛЫ) ---------- */
 .hero{
   position:relative;
-  width:100%;
+  width:min(430px,100%);
+  margin:12px auto 0;
   height:min(56vh,520px);
   min-height:320px;
   overflow:hidden;
-  background:#000; /* если постер не подгрузился */
+
+  border-radius:22px;          /* <-- скругление */
+  box-shadow:var(--shadow);     /* <-- как в Peaky */
+  background:#000;              /* если постер не подгрузился */
 }
+
 .heroVideo{
   position:absolute;
   inset:0;
@@ -53,33 +69,36 @@ a{text-decoration:none}
   height:100%;
   object-fit:cover;
   object-position:center;
-  pointer-events:none; /* важно: клики проходят */
+  pointer-events:none;
 }
+
+/* мягкая вуаль, но не “черная” как раньше */
 .hero::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.6));
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18));
   pointer-events:none;
 }
 
-/* MENU BUTTON */
+/* MENU BUTTON — прозрачная, без обводок/теней/фона */
 .menuBtn{
   position:absolute;
   top:14px;
   right:14px;
-  width:46px;
-  height:46px;
-  border-radius:14px;
+  width:56px;
+  height:56px;
+  border-radius:18px;
   display:grid;
   place-items:center;
-  background:rgba(26,20,17,.6);
-  backdrop-filter:blur(10px);
-  box-shadow:var(--shadow);
+  background:transparent;
+  box-shadow:none;
   z-index:5;
+  transition:transform .14s ease, filter .14s ease;
+  outline:none;
 }
-.menuBtn svg{width:22px;height:22px;color:var(--goldC)}
-.menuBtn:active{transform:scale(.96)}
+.menuBtn svg{width:26px;height:26px;color:rgba(28,28,28,.92)}
+.menuBtn:active{transform:scale(.96);filter:brightness(.98)}
 
 /* ---------- CONTENT ---------- */
 .wrap{
@@ -94,13 +113,16 @@ a{text-decoration:none}
   font-weight:900;
   letter-spacing:1.2px;
   color:transparent;
-  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+
+  background:linear-gradient(90deg,#1c1c1c,#7f8a99,#1c1c1c,#b7c0cc,#1c1c1c);
   background-size:220% auto;
   -webkit-background-clip:text;
   background-clip:text;
-  animation:goldFlow 10s linear infinite;
+  animation:metalFlow 10s linear infinite;
+
+  text-shadow:0 10px 22px rgba(0,0,0,.05);
 }
-@keyframes goldFlow{to{background-position:220% 50%}}
+@keyframes metalFlow{to{background-position:220% 50%}}
 
 .lead{
   margin-top:10px;
@@ -121,6 +143,7 @@ a{text-decoration:none}
   background:#000;
   display:block;
 }
+
 .workVideo{
   position:absolute;
   inset:0;
@@ -130,13 +153,15 @@ a{text-decoration:none}
   object-position:center;
   pointer-events:none;
 }
+
 .workBanner::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.65));
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.22));
   pointer-events:none;
 }
+
 .workTitle{
   position:absolute;
   inset:0;
@@ -146,15 +171,17 @@ a{text-decoration:none}
   font-weight:900;
   letter-spacing:1px;
   color:transparent;
-  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+
+  background:linear-gradient(90deg,#1c1c1c,#7f8a99,#1c1c1c,#b7c0cc,#1c1c1c);
   background-size:220% auto;
   -webkit-background-clip:text;
   background-clip:text;
-  animation:goldFlow 10s linear infinite;
-  text-shadow:0 12px 26px rgba(0,0,0,.45);
+  animation:metalFlow 10s linear infinite;
+
+  text-shadow:0 12px 26px rgba(0,0,0,.18);
 }
 
-/* ---------- METAL BUTTONS ---------- */
+/* ---------- PLATINUM BUTTONS ---------- */
 .grid{
   margin-top:18px;
   display:grid;
@@ -171,28 +198,44 @@ a{text-decoration:none}
   justify-content:center;
   font-weight:900;
   letter-spacing:.6px;
-  color:var(--goldText);
+  color:var(--text2);
+
   background:
-    linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,0) 36%),
-    linear-gradient(120deg,#8b6a1f,var(--goldD),var(--goldA),var(--goldC),var(--goldB),var(--goldA),#8b6a1f);
+    linear-gradient(180deg, rgba(255,255,255,.60), rgba(255,255,255,0) 38%),
+    linear-gradient(120deg,
+      #AEB7C3,
+      var(--plat1),
+      #E8EDF5,
+      var(--plat3),
+      var(--plat2),
+      #E8EDF5,
+      #AEB7C3
+    );
+
   box-shadow:var(--shadow);
   overflow:hidden;
   user-select:none;
+  transition:transform .15s ease, filter .15s ease;
 }
+
 .metalBtn::after{
   content:"";
   position:absolute;
   inset:-60%;
-  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);
+  background:linear-gradient(115deg,
+    transparent 40%,
+    rgba(255,255,255,.55) 50%,
+    transparent 60%
+  );
   transform:translateX(-50%) rotate(12deg);
   animation:shimmer 3s linear infinite;
   mix-blend-mode:screen;
   pointer-events:none;
 }
 @keyframes shimmer{to{transform:translateX(50%) rotate(12deg)}}
-.metalBtn:active{transform:translateY(1px) scale(.98); filter:brightness(.96)}
+.metalBtn:active{ transform:translateY(1px) scale(.98); filter:brightness(.985); }
 
-/* ---------- MENU SHEET ---------- */
+/* ---------- MENU SHEET (платина) ---------- */
 .sheetWrap{
   position:fixed;
   inset:0;
@@ -200,49 +243,69 @@ a{text-decoration:none}
   z-index:1000;
 }
 .sheetWrap.active{display:block}
+
 .sheetShade{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.55);
+  background:rgba(0,0,0,.32);
+  backdrop-filter:blur(6px);
 }
+
 .sheet{
   position:absolute;
   right:0;
   top:0;
   height:100%;
   width:min(86vw,340px);
-  background:rgba(18,14,12,.95);
+
+  background:linear-gradient(180deg, var(--bgA) 0%, var(--bgB) 55%, var(--bgC) 100%);
   padding:18px;
+
   transform:translateX(100%);
   transition:transform .22s ease-out;
+
+  box-shadow:-18px 0 38px rgba(0,0,0,.18);
+  border-top-left-radius:22px;
+  border-bottom-left-radius:22px;
 }
+
 .sheetWrap.active .sheet{transform:none}
-.sheet h2{color:var(--heading);font-weight:900;margin:8px 0 14px}
+
+.sheet h2{
+  color:var(--text2);
+  font-weight:900;
+  margin:8px 0 14px;
+}
+
 .sheet a{
   display:block;
   padding:14px;
   border-radius:16px;
-  background:rgba(255,255,255,.04);
+  background:linear-gradient(180deg, var(--bgA) 0%, var(--bgB) 100%);
   margin-bottom:12px;
   box-shadow:var(--shadow);
+  color:var(--text2);
+  font-weight:800;
 }
+.sheet a:active{transform:translateY(1px)}
 
+/* footer */
 .foot{
   margin-top:18px;
   text-align:center;
   font-size:12px;
-  color:rgba(156,163,175,.9);
+  color:rgba(120,130,145,.95);
 }
 .foot a{
-  color:rgba(230,230,230,.9);
+  color:rgba(42,42,42,.9);
   font-weight:900;
   text-decoration:none;
-  border-bottom:1px dashed rgba(201,162,77,.55);
+  border-bottom:1px dashed rgba(160,170,185,.85);
 }
 
 /* лёгкий hover только на ПК */
 @media (hover:hover){
-  .metalBtn:hover{filter:brightness(.98)}
+  .metalBtn:hover{filter:brightness(.995)}
   .workBanner:hover{transform:translateY(-1px)}
 }
 </style>
@@ -339,37 +402,24 @@ const vids = [
 
 function tryPlay(v){
   if(!v) return;
-  // гарантируем нужные флаги
   v.muted = true;
   v.playsInline = true;
 
   const p = v.play();
   if(p && typeof p.catch === 'function'){
-    p.catch(()=>{ /* если браузер запретил — попробуем позже */ });
+    p.catch(()=>{});
   }
 }
+function kickAll(){ vids.forEach(v => tryPlay(v)); }
 
-function kickAll(){
-  vids.forEach(v => tryPlay(v));
-}
-
-/* 1) сразу */
 kickAll();
-
-/* 2) после готовности страницы */
 window.addEventListener('load', kickAll);
-
-/* 3) на первый тап/скролл (часто нужно на Android) */
 ['touchstart','pointerdown','click','scroll'].forEach(evt=>{
   window.addEventListener(evt, kickAll, { once:true, passive:true });
 });
-
-/* 4) когда вкладка возвращается */
 document.addEventListener('visibilitychange', ()=>{
   if(!document.hidden) kickAll();
 });
-
-/* 5) если видео внезапно остановилось — поднимем */
 vids.forEach(v=>{
   v.addEventListener('pause', ()=>{
     if(!document.hidden) tryPlay(v);
