@@ -20,6 +20,7 @@
   --goldD:#B8933E;
   --goldText:#0F1115;
 
+  /* меньше теней */
   --shadow:0 10px 22px rgba(0,0,0,.35);
 }
 
@@ -42,7 +43,7 @@ a{text-decoration:none}
   padding: 14px 16px 28px;
 }
 
-/* topbar */
+/* ---------- TOPBAR (back left, menu right) ---------- */
 .topbar{
   height:56px;
   display:flex;
@@ -50,14 +51,6 @@ a{text-decoration:none}
   justify-content:space-between;
   gap:10px;
 }
-.brand{
-  font-weight:900;
-  letter-spacing:.5px;
-  color:var(--heading);
-  opacity:.95;
-}
-
-/* back button in menu style */
 .iconBtn{
   width:46px;
   height:46px;
@@ -71,7 +64,7 @@ a{text-decoration:none}
 .iconBtn:active{transform:scale(.96)}
 .iconSvg{width:22px;height:22px;color:var(--goldC)}
 
-/* title */
+/* ---------- TITLES ---------- */
 .h1{
   margin-top: 6px;
   text-align:center;
@@ -94,27 +87,7 @@ a{text-decoration:none}
   line-height:1.45;
 }
 
-/* card */
-.card{
-  margin-top:16px;
-  padding:14px;
-  border-radius:22px;
-  background:rgba(255,255,255,.02);
-  box-shadow:var(--shadow);
-  display:grid;
-  gap:14px;
-}
-
-/* section header */
-.block h3{
-  margin:0 0 8px;
-  font-size:12px;
-  letter-spacing:.4px;
-  color:rgba(244,231,183,.92);
-  font-weight:900;
-}
-
-/* metallic control base */
+/* ---------- METAL BASE (buttons/controls) ---------- */
 .metalBase{
   position:relative;
   background:
@@ -135,7 +108,50 @@ a{text-decoration:none}
 }
 @keyframes shimmer{to{transform:translateX(50%) rotate(12deg)}}
 
-/* dropdown */
+/* ---------- ACTION BUTTONS UNDER TITLE ---------- */
+.actions{
+  margin-top:14px;
+  display:grid;
+  gap:12px;
+}
+.actionBtn{
+  height:58px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-weight:900;
+  letter-spacing:.5px;
+  color:var(--goldText);
+  user-select:none;
+}
+.actionBtn:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.tgIcon{
+  width:20px;height:20px;
+  flex:0 0 auto;
+  color:rgba(15,17,21,.86);
+}
+
+/* ---------- CARD ---------- */
+.card{
+  margin-top:16px;
+  padding:14px;
+  border-radius:22px;
+  background:rgba(255,255,255,.02);
+  box-shadow:var(--shadow);
+  display:grid;
+  gap:14px;
+}
+.block h3{
+  margin:0 0 8px;
+  font-size:12px;
+  letter-spacing:.4px;
+  color:rgba(244,231,183,.92);
+  font-weight:900;
+}
+
+/* ---------- DROPDOWN ---------- */
 .dropdown{position:relative}
 .dd-toggle{
   height:54px;
@@ -148,8 +164,8 @@ a{text-decoration:none}
   font-weight:900;
   letter-spacing:.2px;
   color:var(--goldText);
+  user-select:none;
 }
-.dd-toggle.metalBase{user-select:none}
 .dd-toggle:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
 .dd-caret{
   width:0;height:0;
@@ -184,7 +200,7 @@ a{text-decoration:none}
 .dd-item:last-child{margin-bottom:0}
 .dd-item:active{transform:translateY(1px)}
 
-/* chips row */
+/* ---------- WEIGHTS (chips) ---------- */
 .row{display:flex;gap:10px;flex-wrap:wrap}
 .chip{
   height:50px;
@@ -198,13 +214,10 @@ a{text-decoration:none}
   color:var(--goldText);
   user-select:none;
 }
-.chip.metalBase:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
-.chip[data-active="1"]{
-  color:var(--goldText);
-  filter:brightness(1.02) saturate(1.05);
-}
+.chip:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.chip[data-active="1"]{filter:brightness(1.02) saturate(1.05)}
 
-/* numeric */
+/* ---------- NUMERIC ---------- */
 .counter{display:flex;align-items:center;gap:10px}
 .counter input{
   width:120px;
@@ -217,13 +230,10 @@ a{text-decoration:none}
   color:var(--goldText);
   outline:none;
 }
-.counter input.metalBase:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.counter input:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
 .counter small{color:var(--muted);font-size:12px}
 
-/* helper text */
-.help{font-size:12px;color:var(--muted);line-height:1.35}
-
-/* result */
+/* ---------- RESULT ---------- */
 .result{
   border-radius:22px;
   padding:14px;
@@ -251,7 +261,7 @@ a{text-decoration:none}
 }
 .note{font-size:12px;color:var(--muted);line-height:1.35}
 
-/* CTA */
+/* ---------- CTA (only calculates on click) ---------- */
 .cta{
   height:56px;
   border-radius:18px;
@@ -261,10 +271,11 @@ a{text-decoration:none}
   font-weight:900;
   letter-spacing:.6px;
   color:var(--goldText);
+  user-select:none;
 }
-.cta.metalBase:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.cta:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
 
-/* small divider */
+/* ---------- SMALL DIVIDER ---------- */
 .hr{
   height:1px;
   border:none;
@@ -272,38 +283,97 @@ a{text-decoration:none}
   margin:4px 0;
 }
 
-/* footer */
+/* ---------- FOOTER ---------- */
 .foot{
-  margin-top:16px;
+  margin-top:18px;
   text-align:center;
-  color:rgba(156,163,175,.9);
   font-size:12px;
+  color:rgba(156,163,175,.9);
 }
-.foot a{
-  color:rgba(230,230,230,.9);
+.foot b{color:rgba(230,230,230,.92);font-weight:900}
+
+/* ---------- SHEET MENU (как на индексе) ---------- */
+.sheetWrap{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:1000;
+}
+.sheetWrap.active{display:block}
+.sheetShade{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter: blur(6px);
+}
+.sheet{
+  position:absolute;
+  right:0;
+  top:0;
+  height:100%;
+  width:min(86vw,340px);
+  background:rgba(18,14,12,.95);
+  padding:18px;
+  transform:translateX(100%);
+  transition:transform .22s ease-out;
+  box-shadow:-18px 0 40px rgba(0,0,0,.55);
+}
+.sheetWrap.active .sheet{transform:none}
+.sheet h2{
+  color:var(--heading);
   font-weight:900;
-  border-bottom:1px dashed rgba(201,162,77,.55);
+  margin:8px 0 14px;
+  letter-spacing:.3px;
 }
+.sheet a{
+  display:block;
+  padding:14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.04);
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+.sheet a:active{transform:translateY(1px)}
 </style>
 </head>
 
 <body>
   <div class="wrap">
     <header class="topbar">
+      <!-- назад на главную -->
       <a class="iconBtn" href="index.html" aria-label="Назад на главную">
         <svg class="iconSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M15 18l-6-6 6-6"/>
         </svg>
       </a>
 
-      <div class="brand">ALLIGATORRB</div>
+      <!-- центр пустой (убрали ALLIGATORRB) -->
+      <div style="flex:1"></div>
 
-      <!-- пустышка для симметрии -->
-      <div style="width:46px;height:46px"></div>
+      <!-- меню как на индексе -->
+      <button class="iconBtn" id="openMenu" aria-label="Открыть меню">
+        <svg class="iconSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </header>
 
     <div class="h1">Калькулятор дохода</div>
-    <div class="lead">Быстро прикинь доход: выбери товар и вес, укажи доплаты и график.</div>
+    <div class="lead">Выбери товар и фасовку, укажи количество и дни. Расчёт только по кнопке.</div>
+
+    <!-- кнопки под заголовком -->
+    <div class="actions">
+      <a class="actionBtn metalBase" href="#" aria-label="Работать с нами">
+        <svg class="tgIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+        </svg>
+        РАБОТАТЬ С НАМИ
+      </a>
+
+      <a class="actionBtn metalBase" href="jobs.html" aria-label="Вакансии">
+        ВАКАНСИИ
+      </a>
+    </div>
 
     <section class="card" id="form">
       <div class="block">
@@ -318,25 +388,7 @@ a{text-decoration:none}
       </div>
 
       <div class="block">
-        <h3>Кто фасует?</h3>
-        <div class="row" id="whoWrap">
-          <button class="chip metalBase" data-name="self">САМ</button>
-          <button class="chip metalBase" data-name="not">НЕ САМ</button>
-        </div>
-        <div class="help">Если фасуешь сам — доплата +50₽ за упаковку.</div>
-      </div>
-
-      <div class="block">
-        <h3>Тип доплаты</h3>
-        <div class="row" id="packWrap">
-          <button class="chip metalBase" data-pack="none">Без</button>
-          <button class="chip metalBase" data-pack="metal">🧲 С метал упаковкой +50₽</button>
-          <button class="chip metalBase" data-pack="stone">🗿 С Будийским ситечком +30₽</button>
-        </div>
-      </div>
-
-      <div class="block">
-        <h3>Вес товара</h3>
+        <h3>Фасовка</h3>
         <div class="row" id="weightWrap"></div>
       </div>
 
@@ -358,35 +410,46 @@ a{text-decoration:none}
 
       <hr class="hr">
 
-      <div class="result" id="resultBox">
+      <div class="result" id="resultBox" aria-live="polite">
         <h4>Ваш месячный доход:</h4>
         <div class="total" id="total">0 ₽ / месяц</div>
-        <div class="note" id="breakdown">Выбери товар и вес, затем укажи количество и дни.</div>
+        <div class="note" id="breakdown">Заполни поля и нажми “РАССЧИТАТЬ ДОХОД”.</div>
       </div>
 
-      <a href="#" class="cta metalBase" id="recalcBtn">РАССЧИТАТЬ</a>
+      <a href="#" class="cta metalBase" id="recalcBtn">РАССЧИТАТЬ ДОХОД</a>
     </section>
 
     <footer class="foot">
-      <a href="index.html">На главную</a>
+      Сделано с 🖤 <b>663 design</b>
     </footer>
   </div>
 
+  <!-- Меню-шторка -->
+  <div class="sheetWrap" id="sheet">
+    <div class="sheetShade" id="closeSheet"></div>
+    <aside class="sheet" role="dialog" aria-label="Меню">
+      <h2>Меню</h2>
+      <a href="index.html">Главная</a>
+      <a href="calc.html">Калькулятор</a>
+      <a href="jobs.html">Вакансии</a>
+    </aside>
+  </div>
+
 <script>
-/* данные калькулятора */
+/* ===== MENU ===== */
+const sheet = document.getElementById('sheet');
+document.getElementById('openMenu').onclick = () => sheet.classList.add('active');
+document.getElementById('closeSheet').onclick = () => sheet.classList.remove('active');
+window.addEventListener('keydown', (e) => { if(e.key === 'Escape') sheet.classList.remove('active'); });
+
+/* ===== CALC DATA (2 товара, 2 фасовки) ===== */
 const PRICES = {
-  shu:   {name:"цейлонский ти гу ань",         weights: {"0.3":300,"0.5":400,"1.0":500,"5.0+":700}},
-  puer:  {name:"фейхоа и пуэр",               weights: {"0.5":300,"1.0":450,"2.0":500,"5.0+":650}},
-  tgy:   {name:"аметист пуэр",                weights: {"1.0":300,"2.0":400,"5.0+":600}},
-  china: {name:"Чимин да хун пау",            weights: {"1":300,"2":400,"5":580}}
+  shu:  {name:"цейлонский ти гу ань", weights: {"0.5":400, "1.0":500}},
+  puer: {name:"фейхоа и пуэр",       weights: {"0.5":300, "1.0":450}}
 };
-const FAC_SELF_BONUS = 50;
-const PACK_BONUS = {none:0, metal:50, stone:30};
 
 /* DOM */
 const weightWrap = document.getElementById('weightWrap');
-const whoWrap = document.getElementById('whoWrap');
-const packWrap = document.getElementById('packWrap');
 const qtyEl = document.getElementById('qty');
 const daysEl = document.getElementById('days');
 const totalEl = document.getElementById('total');
@@ -421,8 +484,14 @@ function buildProductList(){
 
 /* helpers */
 function fmt(n){return n.toLocaleString('ru-RU')}
+function clampNum(el,min,max){
+  let v = parseInt(el.value||0,10);
+  if(isNaN(v)) v=0;
+  v=Math.max(min,Math.min(max,v));
+  el.value=v;
+}
 function chipify(container, attrName, value){
-  [...container.querySelectorAll('[data-active]')].forEach(ch=>{
+  [...container.querySelectorAll(`[${attrName}]`)].forEach(ch=>{
     ch.dataset.active = (ch.getAttribute(attrName)===value) ? "1" : "0";
   });
 }
@@ -430,33 +499,29 @@ function getActiveValue(container, attrName){
   const el = container.querySelector(`[${attrName}][data-active="1"]`);
   return el ? el.getAttribute(attrName) : null;
 }
-function clampNum(el,min,max){
-  let v = parseInt(el.value||0,10);
-  if(isNaN(v)) v=0;
-  v=Math.max(min,Math.min(max,v));
-  el.value=v;
-}
 
-/* weights */
+/* weights render */
 function renderWeights(){
   weightWrap.innerHTML='';
   if(!productKey) return;
-  const prod = PRICES[productKey];
-
-  const keys = Object.keys(prod.weights);
-  keys.sort((a,b)=>parseFloat(a) - parseFloat(b));
+  const weights = PRICES[productKey].weights;
+  const keys = Object.keys(weights).sort((a,b)=>parseFloat(a)-parseFloat(b));
 
   keys.forEach((w)=>{
-    const price = prod.weights[w];
+    const price = weights[w];
     const b=document.createElement('button');
     b.className='chip metalBase';
-    b.textContent=(w.includes('+')? w : w+' г')+` — ${price}₽`;
     b.setAttribute('data-weight', w);
     b.setAttribute('data-active', "0");
-    b.addEventListener('click',()=>{ chipify(weightWrap,'data-weight',w); calc(); });
+    b.textContent = `${w} — ${price}₽`;
+    b.addEventListener('click',()=>{
+      chipify(weightWrap,'data-weight',w);
+      // ВАЖНО: НЕ считаем автоматически
+    });
     weightWrap.appendChild(b);
   });
 
+  // по умолчанию активируем 0.5
   if(keys[0]) chipify(weightWrap,'data-weight', keys[0]);
 }
 
@@ -465,67 +530,50 @@ function selectProduct(key){
   productKey = key;
   productLabel.textContent = PRICES[key].name;
   renderWeights();
-  calc();
+  // НЕ считаем автоматически
 }
 
-/* events */
-whoWrap.addEventListener('click',e=>{
-  const btn=e.target.closest('button'); if(!btn) return;
-  chipify(whoWrap,'data-name',btn.getAttribute('data-name')); calc();
-});
-packWrap.addEventListener('click',e=>{
-  const btn=e.target.closest('button'); if(!btn) return;
-  chipify(packWrap,'data-pack',btn.getAttribute('data-pack')); calc();
-});
-qtyEl.addEventListener('input',()=>{ clampNum(qtyEl,0,100); calc(); });
-daysEl.addEventListener('input',()=>{ clampNum(daysEl,0,7); calc(); });
-recalcBtn.addEventListener('click',e=>{ e.preventDefault(); calc(); });
-
-/* calc */
+/* calc only on button */
 function calc(){
+  clampNum(qtyEl,0,100);
+  clampNum(daysEl,0,7);
+
   const weightKey = getActiveValue(weightWrap,'data-weight');
-  const who = getActiveValue(whoWrap,'data-name');
-  const self = (who==='self') ? FAC_SELF_BONUS : 0;
-
-  const packKey = getActiveValue(packWrap,'data-pack') || 'none';
-  const pack = PACK_BONUS[packKey] ?? 0;
-
   const qty = parseInt(qtyEl.value,10)||0;
   const days = parseInt(daysEl.value,10)||0;
 
   if(!productKey || !weightKey){
     totalEl.textContent = `0 ₽ / месяц`;
-    breakdownEl.textContent = `Выберите товар и вес.`;
+    breakdownEl.textContent = `Выбери товар и фасовку, затем нажми “РАССЧИТАТЬ ДОХОД”.`;
     return;
   }
 
   const base = PRICES[productKey].weights[weightKey];
-  const perItem = base + self + pack;
+  const perItem = base;
   const perDay = perItem * qty;
   const perWeek = perDay * days;
   const perMonth = Math.round(perWeek * 4.345);
 
   totalEl.textContent = `${fmt(perMonth)} ₽ / месяц`;
   breakdownEl.textContent =
-    `${PRICES[productKey].name}: ${weightKey} — база ${fmt(base)}₽; доплаты: фасовка ${fmt(self)}₽, упаковка ${fmt(pack)}₽; `+
-    `в день ${qty} × ${fmt(perItem)}₽ = ${fmt(perDay)}₽; в неделю ${days} дн = ${fmt(perWeek)}₽.`;
+    `${PRICES[productKey].name}: фасовка ${weightKey} — ${fmt(base)}₽; `+
+    `в день: ${qty} × ${fmt(perItem)}₽ = ${fmt(perDay)}₽; `+
+    `в неделю: ${days} дн = ${fmt(perWeek)}₽.`;
 }
+
+/* events (без автокалькуляции) */
+qtyEl.addEventListener('input',()=>clampNum(qtyEl,0,100));
+daysEl.addEventListener('input',()=>clampNum(daysEl,0,7));
+recalcBtn.addEventListener('click',e=>{ e.preventDefault(); calc(); });
 
 /* init */
 function init(){
   buildProductList();
-
-  // init active states
-  [...whoWrap.querySelectorAll('button')].forEach(b=>b.dataset.active="0");
-  [...packWrap.querySelectorAll('button')].forEach(b=>b.dataset.active="0");
-
-  chipify(whoWrap,'data-name','not');
-  chipify(packWrap,'data-pack','none');
-
   selectProduct('shu');
   qtyEl.value = 0;
   daysEl.value = 0;
-  calc();
+  totalEl.textContent = `0 ₽ / месяц`;
+  breakdownEl.textContent = `Заполни поля и нажми “РАССЧИТАТЬ ДОХОД”.`;
 }
 init();
 </script>
