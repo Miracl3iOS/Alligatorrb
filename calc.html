@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>ALLIGATORRB · Калькулятор дохода</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#1A1411;
+
+  --text:#E6E6E6;
+  --muted:#9CA3AF;
+  --heading:#F5F5F5;
+
+  --goldA:#D4AF37;
+  --goldB:#C9A24D;
+  --goldC:#F4E7B7;
+  --goldD:#B8933E;
+  --goldText:#0F1115;
+
+  --shadow:0 10px 22px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Poppins,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a,button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;outline:none}
+button{border:0;background:none;cursor:pointer}
+a{text-decoration:none}
+
+.wrap{
+  width:min(430px,100%);
+  margin:0 auto;
+  padding: 14px 16px 28px;
+}
+
+/* topbar */
+.topbar{
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.brand{
+  font-weight:900;
+  letter-spacing:.5px;
+  color:var(--heading);
+  opacity:.95;
+}
+
+/* back button in menu style */
+.iconBtn{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:rgba(26,20,17,.6);
+  backdrop-filter:blur(10px);
+  box-shadow:var(--shadow);
+}
+.iconBtn:active{transform:scale(.96)}
+.iconSvg{width:22px;height:22px;color:var(--goldC)}
+
+/* title */
+.h1{
+  margin-top: 6px;
+  text-align:center;
+  font-size:clamp(26px,6.2vw,38px);
+  font-weight:900;
+  letter-spacing:.8px;
+  color:transparent;
+  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+  background-size:220% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  animation:goldFlow 10s linear infinite;
+}
+@keyframes goldFlow{to{background-position:220% 50%}}
+.lead{
+  margin-top:10px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+/* card */
+.card{
+  margin-top:16px;
+  padding:14px;
+  border-radius:22px;
+  background:rgba(255,255,255,.02);
+  box-shadow:var(--shadow);
+  display:grid;
+  gap:14px;
+}
+
+/* section header */
+.block h3{
+  margin:0 0 8px;
+  font-size:12px;
+  letter-spacing:.4px;
+  color:rgba(244,231,183,.92);
+  font-weight:900;
+}
+
+/* metallic control base */
+.metalBase{
+  position:relative;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.30),rgba(255,255,255,0) 36%),
+    linear-gradient(120deg,#8b6a1f,var(--goldD),var(--goldA),var(--goldC),var(--goldB),var(--goldA),#8b6a1f);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.metalBase::after{
+  content:"";
+  position:absolute;
+  inset:-60%;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.40) 50%,transparent 60%);
+  transform:translateX(-50%) rotate(12deg);
+  animation:shimmer 3s linear infinite;
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+@keyframes shimmer{to{transform:translateX(50%) rotate(12deg)}}
+
+/* dropdown */
+.dropdown{position:relative}
+.dd-toggle{
+  height:54px;
+  border-radius:18px;
+  padding:0 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:900;
+  letter-spacing:.2px;
+  color:var(--goldText);
+}
+.dd-toggle.metalBase{user-select:none}
+.dd-toggle:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.dd-caret{
+  width:0;height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:7px solid rgba(15,17,21,.75);
+  opacity:.9;
+}
+.dd-list{
+  position:absolute;
+  left:0; right:0;
+  top:calc(100% + 10px);
+  border-radius:18px;
+  background:rgba(18,14,12,.95);
+  box-shadow:var(--shadow);
+  padding:6px;
+  max-height:260px;
+  overflow:auto;
+  display:none;
+  z-index:10;
+}
+.dropdown.open .dd-list{display:block}
+.dd-item{
+  padding:12px 12px;
+  border-radius:14px;
+  font-weight:900;
+  color:var(--text);
+  cursor:pointer;
+  background:rgba(255,255,255,.03);
+  margin-bottom:6px;
+}
+.dd-item:last-child{margin-bottom:0}
+.dd-item:active{transform:translateY(1px)}
+
+/* chips row */
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.chip{
+  height:50px;
+  border-radius:18px;
+  padding:0 14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  letter-spacing:.2px;
+  color:var(--goldText);
+  user-select:none;
+}
+.chip.metalBase:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.chip[data-active="1"]{
+  color:var(--goldText);
+  filter:brightness(1.02) saturate(1.05);
+}
+
+/* numeric */
+.counter{display:flex;align-items:center;gap:10px}
+.counter input{
+  width:120px;
+  height:52px;
+  border-radius:18px;
+  border:none;
+  padding:0 12px;
+  font-weight:900;
+  text-align:center;
+  color:var(--goldText);
+  outline:none;
+}
+.counter input.metalBase:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+.counter small{color:var(--muted);font-size:12px}
+
+/* helper text */
+.help{font-size:12px;color:var(--muted);line-height:1.35}
+
+/* result */
+.result{
+  border-radius:22px;
+  padding:14px;
+  background:rgba(255,255,255,.03);
+  box-shadow:var(--shadow);
+  display:grid;
+  gap:6px;
+}
+.result h4{
+  margin:0;
+  font-size:12px;
+  color:rgba(244,231,183,.92);
+  font-weight:900;
+  letter-spacing:.4px;
+}
+.total{
+  font-size:22px;
+  font-weight:900;
+  color:transparent;
+  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+  background-size:220% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  animation:goldFlow 10s linear infinite;
+}
+.note{font-size:12px;color:var(--muted);line-height:1.35}
+
+/* CTA */
+.cta{
+  height:56px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  letter-spacing:.6px;
+  color:var(--goldText);
+}
+.cta.metalBase:active{transform:translateY(1px) scale(.99); filter:brightness(.96)}
+
+/* small divider */
+.hr{
+  height:1px;
+  border:none;
+  background:rgba(255,255,255,.06);
+  margin:4px 0;
+}
+
+/* footer */
+.foot{
+  margin-top:16px;
+  text-align:center;
+  color:rgba(156,163,175,.9);
+  font-size:12px;
+}
+.foot a{
+  color:rgba(230,230,230,.9);
+  font-weight:900;
+  border-bottom:1px dashed rgba(201,162,77,.55);
+}
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <a class="iconBtn" href="index.html" aria-label="Назад на главную">
+        <svg class="iconSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </a>
+
+      <div class="brand">ALLIGATORRB</div>
+
+      <!-- пустышка для симметрии -->
+      <div style="width:46px;height:46px"></div>
+    </header>
+
+    <div class="h1">Калькулятор дохода</div>
+    <div class="lead">Быстро прикинь доход: выбери товар и вес, укажи доплаты и график.</div>
+
+    <section class="card" id="form">
+      <div class="block">
+        <h3>Товар</h3>
+        <div class="dropdown" id="productDD">
+          <div class="dd-toggle metalBase" id="productToggle">
+            <span id="productLabel">—</span>
+            <i class="dd-caret"></i>
+          </div>
+          <div class="dd-list" id="productList"></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Кто фасует?</h3>
+        <div class="row" id="whoWrap">
+          <button class="chip metalBase" data-name="self">САМ</button>
+          <button class="chip metalBase" data-name="not">НЕ САМ</button>
+        </div>
+        <div class="help">Если фасуешь сам — доплата +50₽ за упаковку.</div>
+      </div>
+
+      <div class="block">
+        <h3>Тип доплаты</h3>
+        <div class="row" id="packWrap">
+          <button class="chip metalBase" data-pack="none">Без</button>
+          <button class="chip metalBase" data-pack="metal">🧲 С метал упаковкой +50₽</button>
+          <button class="chip metalBase" data-pack="stone">🗿 С Будийским ситечком +30₽</button>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Вес товара</h3>
+        <div class="row" id="weightWrap"></div>
+      </div>
+
+      <div class="block">
+        <h3>Количество отправок в день</h3>
+        <div class="counter">
+          <input class="metalBase" type="number" id="qty" value="0" min="0" max="100" />
+          <small>0–100</small>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Дней работы в неделю</h3>
+        <div class="counter">
+          <input class="metalBase" type="number" id="days" value="0" min="0" max="7" />
+          <small>0–7</small>
+        </div>
+      </div>
+
+      <hr class="hr">
+
+      <div class="result" id="resultBox">
+        <h4>Ваш месячный доход:</h4>
+        <div class="total" id="total">0 ₽ / месяц</div>
+        <div class="note" id="breakdown">Выбери товар и вес, затем укажи количество и дни.</div>
+      </div>
+
+      <a href="#" class="cta metalBase" id="recalcBtn">РАССЧИТАТЬ</a>
+    </section>
+
+    <footer class="foot">
+      <a href="index.html">На главную</a>
+    </footer>
+  </div>
+
+<script>
+/* данные калькулятора */
+const PRICES = {
+  shu:   {name:"цейлонский ти гу ань",         weights: {"0.3":300,"0.5":400,"1.0":500,"5.0+":700}},
+  puer:  {name:"фейхоа и пуэр",               weights: {"0.5":300,"1.0":450,"2.0":500,"5.0+":650}},
+  tgy:   {name:"аметист пуэр",                weights: {"1.0":300,"2.0":400,"5.0+":600}},
+  china: {name:"Чимин да хун пау",            weights: {"1":300,"2":400,"5":580}}
+};
+const FAC_SELF_BONUS = 50;
+const PACK_BONUS = {none:0, metal:50, stone:30};
+
+/* DOM */
+const weightWrap = document.getElementById('weightWrap');
+const whoWrap = document.getElementById('whoWrap');
+const packWrap = document.getElementById('packWrap');
+const qtyEl = document.getElementById('qty');
+const daysEl = document.getElementById('days');
+const totalEl = document.getElementById('total');
+const breakdownEl = document.getElementById('breakdown');
+const recalcBtn = document.getElementById('recalcBtn');
+
+/* dropdown */
+const productDD = document.getElementById('productDD');
+const productToggle = document.getElementById('productToggle');
+const productLabel = document.getElementById('productLabel');
+const productList = document.getElementById('productList');
+let productKey = null;
+
+function openCloseDD(force){
+  if(force===true){ productDD.classList.add('open'); return; }
+  if(force===false){ productDD.classList.remove('open'); return; }
+  productDD.classList.toggle('open');
+}
+productToggle.addEventListener('click',()=>openCloseDD());
+document.addEventListener('click',e=>{ if(!productDD.contains(e.target)) openCloseDD(false); });
+
+function buildProductList(){
+  productList.innerHTML='';
+  Object.entries(PRICES).forEach(([key,obj])=>{
+    const div=document.createElement('div');
+    div.className='dd-item';
+    div.textContent=obj.name;
+    div.addEventListener('click',()=>{ selectProduct(key); openCloseDD(false); });
+    productList.appendChild(div);
+  });
+}
+
+/* helpers */
+function fmt(n){return n.toLocaleString('ru-RU')}
+function chipify(container, attrName, value){
+  [...container.querySelectorAll('[data-active]')].forEach(ch=>{
+    ch.dataset.active = (ch.getAttribute(attrName)===value) ? "1" : "0";
+  });
+}
+function getActiveValue(container, attrName){
+  const el = container.querySelector(`[${attrName}][data-active="1"]`);
+  return el ? el.getAttribute(attrName) : null;
+}
+function clampNum(el,min,max){
+  let v = parseInt(el.value||0,10);
+  if(isNaN(v)) v=0;
+  v=Math.max(min,Math.min(max,v));
+  el.value=v;
+}
+
+/* weights */
+function renderWeights(){
+  weightWrap.innerHTML='';
+  if(!productKey) return;
+  const prod = PRICES[productKey];
+
+  const keys = Object.keys(prod.weights);
+  keys.sort((a,b)=>parseFloat(a) - parseFloat(b));
+
+  keys.forEach((w)=>{
+    const price = prod.weights[w];
+    const b=document.createElement('button');
+    b.className='chip metalBase';
+    b.textContent=(w.includes('+')? w : w+' г')+` — ${price}₽`;
+    b.setAttribute('data-weight', w);
+    b.setAttribute('data-active', "0");
+    b.addEventListener('click',()=>{ chipify(weightWrap,'data-weight',w); calc(); });
+    weightWrap.appendChild(b);
+  });
+
+  if(keys[0]) chipify(weightWrap,'data-weight', keys[0]);
+}
+
+/* select product */
+function selectProduct(key){
+  productKey = key;
+  productLabel.textContent = PRICES[key].name;
+  renderWeights();
+  calc();
+}
+
+/* events */
+whoWrap.addEventListener('click',e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  chipify(whoWrap,'data-name',btn.getAttribute('data-name')); calc();
+});
+packWrap.addEventListener('click',e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  chipify(packWrap,'data-pack',btn.getAttribute('data-pack')); calc();
+});
+qtyEl.addEventListener('input',()=>{ clampNum(qtyEl,0,100); calc(); });
+daysEl.addEventListener('input',()=>{ clampNum(daysEl,0,7); calc(); });
+recalcBtn.addEventListener('click',e=>{ e.preventDefault(); calc(); });
+
+/* calc */
+function calc(){
+  const weightKey = getActiveValue(weightWrap,'data-weight');
+  const who = getActiveValue(whoWrap,'data-name');
+  const self = (who==='self') ? FAC_SELF_BONUS : 0;
+
+  const packKey = getActiveValue(packWrap,'data-pack') || 'none';
+  const pack = PACK_BONUS[packKey] ?? 0;
+
+  const qty = parseInt(qtyEl.value,10)||0;
+  const days = parseInt(daysEl.value,10)||0;
+
+  if(!productKey || !weightKey){
+    totalEl.textContent = `0 ₽ / месяц`;
+    breakdownEl.textContent = `Выберите товар и вес.`;
+    return;
+  }
+
+  const base = PRICES[productKey].weights[weightKey];
+  const perItem = base + self + pack;
+  const perDay = perItem * qty;
+  const perWeek = perDay * days;
+  const perMonth = Math.round(perWeek * 4.345);
+
+  totalEl.textContent = `${fmt(perMonth)} ₽ / месяц`;
+  breakdownEl.textContent =
+    `${PRICES[productKey].name}: ${weightKey} — база ${fmt(base)}₽; доплаты: фасовка ${fmt(self)}₽, упаковка ${fmt(pack)}₽; `+
+    `в день ${qty} × ${fmt(perItem)}₽ = ${fmt(perDay)}₽; в неделю ${days} дн = ${fmt(perWeek)}₽.`;
+}
+
+/* init */
+function init(){
+  buildProductList();
+
+  // init active states
+  [...whoWrap.querySelectorAll('button')].forEach(b=>b.dataset.active="0");
+  [...packWrap.querySelectorAll('button')].forEach(b=>b.dataset.active="0");
+
+  chipify(whoWrap,'data-name','not');
+  chipify(packWrap,'data-pack','none');
+
+  selectProduct('shu');
+  qtyEl.value = 0;
+  daysEl.value = 0;
+  calc();
+}
+init();
+</script>
+</body>
+</html>
