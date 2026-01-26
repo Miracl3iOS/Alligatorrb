@@ -192,6 +192,12 @@ a{text-decoration:none}
 @keyframes shimmer{to{transform:translateX(50%) rotate(12deg)}}
 .metalBtn:active{transform:translateY(1px) scale(.98); filter:brightness(.96)}
 
+.metalBtn .tgIcon{
+  width:20px;
+  height:20px;
+  margin-right:10px;
+}
+
 /* ---------- MENU SHEET ---------- */
 .sheetWrap{
   position:fixed;
@@ -299,13 +305,47 @@ a{text-decoration:none}
 
   <!-- BUTTONS -->
   <section class="grid" aria-label="Кнопки">
-    <a class="metalBtn" href="https://clck.ru/3RAxBs">КАНАЛ И ЧАТ</a>
-    <a class="metalBtn" href="https://clck.ru/3RSeNb">СОЗДАТЬ БОТ</a>
-    <a class="metalBtn" href="https://clck.ru/3RSeTV">БОТ ПРОДАЖ</a>
-    <a class="metalBtn" href="https://clck.ru/3RSeTV">ИНФО БОТ</a>
-    <a class="metalBtn" href="https://clck.ru/3RSeVg">САППОРТ</a>
-    <a class="metalBtn" href="https://clck.ru/3RSeVg">РАБОТА</a>
+    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Канал и чат">
+      <svg class="tgIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+      </svg>
+      КАНАЛ И ЧАТ
+    </a>
+    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Создать бот">
+      СОЗДАТЬ БОТ
+    </a>
+    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Бот продаж">
+      БОТ ПРОДАЖ
+    </a>
+    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Инфо бот">
+      ИНФО БОТ
+    </a>
+    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Саппорт">
+      САППОРТ
+    </a>
+    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Работа">
+      РАБОТА
+    </a>
   </section>
+
+  <!-- CALCULATOR BANNER -->
+  <a class="workBanner" href="calc.html" aria-label="Калькулятор">
+    <video
+      class="workVideo"
+      id="calcVideo"
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+      poster="calc.jpg"
+      disablepictureinpicture
+      controlslist="nodownload noplaybackrate noremoteplayback"
+    >
+      <source src="calc.mp4" type="video/mp4">
+    </video>
+    <div class="workTitle">КАЛЬКУЛЯТОР</div>
+  </a>
 
   <footer class="foot">
     Сделано — 🖤 <a href="#">663 design</a>
@@ -317,10 +357,9 @@ a{text-decoration:none}
   <div class="sheetShade" id="closeSheet"></div>
   <aside class="sheet" role="dialog" aria-label="Меню">
     <h2>Меню</h2>
-    <a href="#">Главная</a>
-    <a href="#">Работа</a>
-    <a href="#">Контакты</a>
-    <a href="#">Вакансии</a>
+    <a href="index.html">Главная</a>
+    <a href="calc.html">Калькулятор</a>
+    <a href="work.html">Вакансии</a>
   </aside>
 </div>
 
@@ -334,7 +373,8 @@ window.addEventListener('keydown', (e) => { if(e.key === 'Escape') sheet.classLi
 /* ===== VIDEO AUTOPLAY HARDENING (iOS/Android/PC) ===== */
 const vids = [
   document.getElementById('heroVideo'),
-  document.getElementById('workVideo')
+  document.getElementById('workVideo'),
+  document.getElementById('calcVideo')
 ].filter(Boolean);
 
 function tryPlay(v){
