@@ -1,0 +1,319 @@
+// ==UserScript==
+// @name         T.me Link Collector (Tor/Firefox)
+// @namespace    local.tme.collector
+// @version      1.2
+// @description  Collects t.me links from pages (anchors + text) and lets you download/copy them.
+// @match        *://*/*
+// @run-at       document-end
+// @noframes
+// @grant        GM_getValue
+// @grant        GM_setValue
+// ==/UserScript==
+
+(() => {
+  'use strict';
+
+  const STORAGE_KEY = 'tme_links_v1';
+  const MAX_TEXT_SCAN = 200_000; // limit per node to avoid heavy scans
+  const TEXT_RE = /(?:https?:\/\/)?t\.me\/[^\s<>"')\]]+/gi;
+
+  // ---------- storage helpers (GM_* if available, else localStorage fallback) ----------
+  const hasGM = typeof GM_getValue === 'function' && typeof GM_setValue === 'function';
+
+  async function loadLinks() {
+    try {
+      if (hasGM) {
+        const arr = GM_getValue(STORAGE_KEY, []);
+        return new Set(Array.isArray(arr) ? arr : []);
+      } else {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return new Set(Array.isArray(arr) ? arr : []);
+      }
+    } catch {
+      return new Set();
+    }
+  }
+
+  let saveTimer = null;
+  function scheduleSave(setRef) {
+    if (saveTimer) return;
+    saveTimer = setTimeout(() => {
+      saveTimer = null;
+      const arr = Array.from(setRef);
+      try {
+        if (hasGM) GM_setValue(STORAGE_KEY, arr);
+        else localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+      } catch (e) {
+        console.debug('Save failed:', e);
+      }
+    }, 800);
+  }
+
+  // ---------- normalize & add ----------
+  function normalizeCandidate(s) {
+    if (!s) return null;
+    s = String(s).trim();
+    if (!s) return null;
+
+    // Handle common forms
+    if (s.startsWith('//t.me/')) s = 'https:' + s;
+    if (s.startsWith('t.me/')) s = 'https://' + s;
+    if (s.startsWith('http://t.me/')) s = 'https://t.me/' + s.slice('http://t.me/'.length);
+
+    // Only keep the exact requested prefixes
+    if (s.startsWith('https://t.me/')) return s;
+    if (s.startsWith('t.me/')) return 'https://' + s;
+
+    return null;
+  }
+
+  function addLink(raw, linksSet) {
+    const norm = normalizeCandidate(raw);
+    if (!norm) return false;
+    const before = linksSet.size;
+    linksSet.add(norm);
+    return linksSet.size !== before;
+  }
+
+  // ---------- scanning ----------
+  function scanAnchors(root, linksSet) {
+    const anchors = root.querySelectorAll ? root.querySelectorAll('a[href]') : [];
+    let changed = false;
+    for (const a of anchors) {
+      // try attribute first (keeps "t.me/..." if it exists), then resolved href
+      const h1 = a.getAttribute('href');
+      const h2 = a.href;
+      if (addLink(h1, linksSet)) changed = true;
+      if (addLink(h2, linksSet)) changed = true;
+    }
+    return changed;
+  }
+
+  function scanText(text, linksSet) {
+    if (!text) return false;
+    if (text.length > MAX_TEXT_SCAN) text = text.slice(0, MAX_TEXT_SCAN);
+
+    const matches = text.match(TEXT_RE);
+    if (!matches || !matches.length) return false;
+
+    let changed = false;
+    for (const m of matches) {
+      // allow "t.me/..." (no protocol) and "https://t.me/..."
+      if (m.startsWith('t.me/')) {
+        if (addLink(m, linksSet)) changed = true;
+      } else if (m.startsWith('https://t.me/')) {
+        if (addLink(m, linksSet)) changed = true;
+      } else if (m.startsWith('http://t.me/')) {
+        if (addLink(m, linksSet)) changed = true;
+      }
+    }
+    return changed;
+  }
+
+  function scanNode(node, linksSet) {
+    let changed = false;
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      changed = scanAnchors(node, linksSet) || changed;
+      // Scan element text (works for cases where link is plain text)
+      const t = node.textContent;
+      changed = scanText(t, linksSet) || changed;
+
+      // If the node is <a> itself
+      if (node.tagName === 'A') {
+        const h1 = node.getAttribute('href');
+        const h2 = node.href;
+        changed = addLink(h1, linksSet) || changed;
+        changed = addLink(h2, linksSet) || changed;
+      }
+    } else if (node.nodeType === Node.TEXT_NODE) {
+      changed = scanText(node.nodeValue, linksSet) || changed;
+    }
+
+    return changed;
+  }
+
+  // ---------- UI ----------
+  function makePanel() {
+    const box = document.createElement('div');
+    box.style.cssText = [
+      'position:fixed',
+      'right:12px',
+      'bottom:12px',
+      'z-index:2147483647',
+      'font:12px/1.3 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif',
+      'background:rgba(255,255,255,0.92)',
+      'color:#111',
+      'border:1px solid rgba(0,0,0,0.15)',
+      'border-radius:10px',
+      'padding:10px',
+      'box-shadow:0 6px 18px rgba(0,0,0,0.15)',
+      'min-width:220px'
+    ].join(';');
+
+    const title = document.createElement('div');
+    title.textContent = 'T.me collector';
+    title.style.cssText = 'font-weight:700;margin-bottom:6px;';
+    box.appendChild(title);
+
+    const status = document.createElement('div');
+    status.innerHTML = 'Собрано: <b id="tme_count">0</b>';
+    status.style.cssText = 'margin-bottom:8px;';
+    box.appendChild(status);
+
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;';
+
+    function btn(label) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.style.cssText = [
+        'padding:6px 8px',
+        'border-radius:8px',
+        'border:1px solid rgba(0,0,0,0.18)',
+        'background:#fff',
+        'cursor:pointer'
+      ].join(';');
+      return b;
+    }
+
+    const bDownload = btn('Скачать .txt');
+    const bCopy = btn('Копировать');
+    const bClear = btn('Очистить');
+    const bPause = btn('Пауза');
+
+    row.appendChild(bDownload);
+    row.appendChild(bCopy);
+    row.appendChild(bClear);
+    row.appendChild(bPause);
+
+    box.appendChild(row);
+
+    const hint = document.createElement('div');
+    hint.textContent = 'Горячие клавиши: Alt+Shift+D скачать, Alt+Shift+C копировать';
+    hint.style.cssText = 'margin-top:8px;opacity:0.75;font-size:11px;';
+    box.appendChild(hint);
+
+    document.documentElement.appendChild(box);
+
+    return { box, bDownload, bCopy, bClear, bPause };
+  }
+
+  function downloadTxt(lines) {
+    const text = lines.join('\n') + (lines.length ? '\n' : '');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    a.href = url;
+    a.download = `tme-links_${stamp}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  async function copyToClipboard(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {}
+    // fallback
+    prompt('Скопируй вручную:', text);
+    return false;
+  }
+
+  // ---------- main ----------
+  (async () => {
+    // If JS is disabled by Tor security level, nothing will work.
+    const links = await loadLinks();
+
+    const ui = makePanel();
+    const countEl = ui.box.querySelector('#tme_count');
+
+    function refreshCount() {
+      if (countEl) countEl.textContent = String(links.size);
+    }
+    refreshCount();
+
+    // initial scan
+    try {
+      let changed = false;
+      changed = scanAnchors(document, links) || changed;
+      if (document.body) changed = scanText(document.body.innerText || document.body.textContent, links) || changed;
+      if (changed) scheduleSave(links);
+      refreshCount();
+    } catch (e) {
+      console.debug('Initial scan failed:', e);
+    }
+
+    // observe changes (infinite scroll etc.)
+    let paused = false;
+    const observer = new MutationObserver((mutList) => {
+      if (paused) return;
+      let changed = false;
+      for (const m of mutList) {
+        if (m.type === 'childList') {
+          for (const n of m.addedNodes) {
+            changed = scanNode(n, links) || changed;
+          }
+        } else if (m.type === 'characterData') {
+          changed = scanNode(m.target, links) || changed;
+        }
+      }
+      if (changed) {
+        scheduleSave(links);
+        refreshCount();
+      }
+    });
+
+    try {
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
+    } catch (e) {
+      console.debug('Observer failed:', e);
+    }
+
+    // buttons
+    ui.bDownload.addEventListener('click', () => {
+      const arr = Array.from(links).sort();
+      downloadTxt(arr);
+    });
+
+    ui.bCopy.addEventListener('click', async () => {
+      const arr = Array.from(links).sort();
+      await copyToClipboard(arr.join('\n'));
+    });
+
+    ui.bClear.addEventListener('click', () => {
+      links.clear();
+      scheduleSave(links);
+      refreshCount();
+    });
+
+    ui.bPause.addEventListener('click', () => {
+      paused = !paused;
+      ui.bPause.textContent = paused ? 'Продолжить' : 'Пауза';
+    });
+
+    // hotkeys
+    window.addEventListener('keydown', async (ev) => {
+      if (!ev.altKey || !ev.shiftKey) return;
+      const key = ev.key.toLowerCase();
+      if (key === 'd') {
+        ev.preventDefault();
+        downloadTxt(Array.from(links).sort());
+      } else if (key === 'c') {
+        ev.preventDefault();
+        await copyToClipboard(Array.from(links).sort().join('\n'));
+      }
+    });
+  })();
+})();
