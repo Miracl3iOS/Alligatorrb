@@ -37,6 +37,69 @@ a,button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
 button{border:0;background:none;cursor:pointer}
 a{text-decoration:none}
 
+/* ===== SMART LOADER (умная загрузка) ===== */
+.loader{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+  transition:opacity .45s ease, visibility .45s ease;
+}
+.loader.hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.loaderInner{
+  width:min(360px,86vw);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+}
+.loaderTitle{
+  font-weight:900;
+  letter-spacing:1px;
+  font-size:18px;
+  color:transparent;
+  background:linear-gradient(90deg,#fff6cf,var(--goldA),#f2e8c4,var(--goldB),#fff6cf);
+  background-size:220% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  animation:goldFlow 10s linear infinite;
+}
+.loaderSub{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+.loaderBar{
+  width:100%;
+  height:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.loaderFill{
+  height:100%;
+  width:35%;
+  border-radius:999px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,0) 36%),
+    linear-gradient(120deg,#8b6a1f,var(--goldD),var(--goldA),var(--goldC),var(--goldB),var(--goldA),#8b6a1f);
+  animation:loadMove 1.15s ease-in-out infinite;
+}
+@keyframes loadMove{
+  0%{transform:translateX(-60%)}
+  50%{transform:translateX(120%)}
+  100%{transform:translateX(-60%)}
+}
+
 /* ---------- HERO VIDEO ---------- */
 .hero{
   position:relative;
@@ -53,7 +116,7 @@ a{text-decoration:none}
   height:100%;
   object-fit:cover;
   object-position:center;
-  pointer-events:none; /* важно: клики проходят */
+  pointer-events:none; /* клики проходят */
 }
 .hero::after{
   content:"";
@@ -169,6 +232,7 @@ a{text-decoration:none}
   display:flex;
   align-items:center;
   justify-content:center;
+  gap:10px;
   font-weight:900;
   letter-spacing:.6px;
   color:var(--goldText);
@@ -191,11 +255,10 @@ a{text-decoration:none}
 }
 @keyframes shimmer{to{transform:translateX(50%) rotate(12deg)}}
 .metalBtn:active{transform:translateY(1px) scale(.98); filter:brightness(.96)}
-
-.metalBtn .tgIcon{
-  width:20px;
-  height:20px;
-  margin-right:10px;
+.metalBtn svg{
+  width:20px;height:20px;
+  flex:0 0 auto;
+  color:rgba(15,17,21,.86);
 }
 
 /* ---------- MENU SHEET ---------- */
@@ -251,10 +314,24 @@ a{text-decoration:none}
   .metalBtn:hover{filter:brightness(.98)}
   .workBanner:hover{transform:translateY(-1px)}
 }
+
+/* если человек отключил анимации */
+@media (prefers-reduced-motion: reduce){
+  .metalBtn::after, .loaderFill, .h1, .workTitle, .loaderTitle{animation:none !important}
+}
 </style>
 </head>
 
 <body>
+
+<!-- SMART LOADER -->
+<div class="loader" id="loader" aria-live="polite">
+  <div class="loaderInner">
+    <div class="loaderTitle">Загружаем…</div>
+    <div class="loaderSub">Держим экран 3–5 секунд, пока подгрузятся видео/картинки.</div>
+    <div class="loaderBar"><div class="loaderFill"></div></div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -265,7 +342,7 @@ a{text-decoration:none}
     loop
     muted
     playsinline
-    preload="metadata"
+    preload="auto"
     poster="hero.jpg"
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noremoteplayback"
@@ -285,7 +362,7 @@ a{text-decoration:none}
   <div class="lead">Получить кайф здесь пиздец как Prosto</div>
 
   <!-- WORK -->
-  <a class="workBanner" href="#" aria-label="Работа">
+  <a class="workBanner" href="work.html" aria-label="Работа">
     <video
       class="workVideo"
       id="workVideo"
@@ -293,7 +370,7 @@ a{text-decoration:none}
       loop
       muted
       playsinline
-      preload="metadata"
+      preload="auto"
       poster="work.jpg"
       disablepictureinpicture
       controlslist="nodownload noplaybackrate noremoteplayback"
@@ -305,25 +382,46 @@ a{text-decoration:none}
 
   <!-- BUTTONS -->
   <section class="grid" aria-label="Кнопки">
+    <!-- Telegram icon svg (same for all) -->
     <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Канал и чат">
-      <svg class="tgIcon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
       </svg>
       КАНАЛ И ЧАТ
     </a>
+
     <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Создать бот">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+      </svg>
       СОЗДАТЬ БОТ
     </a>
+
     <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Бот продаж">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+      </svg>
       БОТ ПРОДАЖ
     </a>
+
     <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Инфо бот">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+      </svg>
       ИНФО БОТ
     </a>
+
     <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Саппорт">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+      </svg>
       САППОРТ
     </a>
-    <a class="metalBtn" href="https://t.me/yourchannel" aria-label="Работа">
+
+    <a class="metalBtn" href="work.html" aria-label="Работа">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22 4.5c.1-.7-.6-1.1-1.2-.8L2.9 10.7c-.8.3-.8 1.3.1 1.6l4.6 1.5 1.8 5.7c.2.7 1.1.9 1.6.4l2.6-2.5 5 3.7c.6.4 1.4.1 1.5-.7L22 4.5ZM8.9 13.2l9.3-5.8c.4-.2.8.3.4.6l-7.7 7.2-.3 3.4-1.7-5.3Z"/>
+      </svg>
       РАБОТА
     </a>
   </section>
@@ -337,7 +435,7 @@ a{text-decoration:none}
       loop
       muted
       playsinline
-      preload="metadata"
+      preload="auto"
       poster="calc.jpg"
       disablepictureinpicture
       controlslist="nodownload noplaybackrate noremoteplayback"
@@ -379,42 +477,94 @@ const vids = [
 
 function tryPlay(v){
   if(!v) return;
-  // гарантируем нужные флаги
   v.muted = true;
   v.playsInline = true;
-
   const p = v.play();
-  if(p && typeof p.catch === 'function'){
-    p.catch(()=>{ /* если браузер запретил — попробуем позже */ });
-  }
+  if(p && typeof p.catch === 'function') p.catch(()=>{});
 }
-
-function kickAll(){
-  vids.forEach(v => tryPlay(v));
-}
-  
-/* 1) сразу */
+function kickAll(){ vids.forEach(tryPlay); }
 kickAll();
-
-/* 2) после готовности страницы */
 window.addEventListener('load', kickAll);
-
-/* 3) на первый тап/скролл (часто нужно на Android) */
 ['touchstart','pointerdown','click','scroll'].forEach(evt=>{
   window.addEventListener(evt, kickAll, { once:true, passive:true });
 });
-
-/* 4) когда вкладка возвращается */
-document.addEventListener('visibilitychange', ()=>{
-  if(!document.hidden) kickAll();
-});
-
-/* 5) если видео внезапно остановилось — поднимем */
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) kickAll(); });
 vids.forEach(v=>{
-  v.addEventListener('pause', ()=>{
-    if(!document.hidden) tryPlay(v);
-  });
+  v.addEventListener('pause', ()=>{ if(!document.hidden) tryPlay(v); });
 });
+
+/* ===== SMART LOADER LOGIC (3–5 секунд "по-умному") =====
+   - минимум 3.2с
+   - скрыть раньше можно только когда видео/постеры готовы (есть кадр)
+   - максимум 5.0с, чтобы не зависнуть на плохом интернете
+*/
+const loader = document.getElementById('loader');
+const MIN_MS = 3200;
+const MAX_MS = 5000;
+
+let minDone = false;
+let mediaDone = false;
+let forced = false;
+
+function hideLoader(){
+  if(!loader || loader.classList.contains('hidden')) return;
+  loader.classList.add('hidden');
+  // на всякий: после скрытия ещё раз попробуем стартануть видео
+  kickAll();
+}
+
+function maybeFinish(){
+  if(forced) return;
+  if(minDone && mediaDone) hideLoader();
+}
+
+function waitVideoFirstFrame(v){
+  return new Promise(resolve=>{
+    if(!v) return resolve();
+    // HAVE_CURRENT_DATA (2) = кадр доступен
+    if(v.readyState >= 2) return resolve();
+    const done = ()=>resolve();
+    v.addEventListener('loadeddata', done, {once:true});
+    v.addEventListener('canplay', done, {once:true});
+    v.addEventListener('error', done, {once:true}); // не блокируемся на ошибке
+  });
+}
+
+function waitImage(url){
+  return new Promise(resolve=>{
+    if(!url) return resolve();
+    const img = new Image();
+    const done = ()=>resolve();
+    img.onload = done;
+    img.onerror = done;
+    // лёгкий анти-кэш если надо: можно убрать ?v=
+    img.src = url;
+  });
+}
+
+async function smartLoad(){
+  // ждём медиа: постеры + первый кадр видео
+  const posters = vids.map(v => v.getAttribute('poster')).filter(Boolean);
+  const mediaPromises = [
+    ...posters.map(waitImage),
+    ...vids.map(waitVideoFirstFrame),
+  ];
+
+  const mediaAll = Promise.all(mediaPromises).then(()=>{ mediaDone = true; maybeFinish(); });
+
+  setTimeout(()=>{ minDone = true; maybeFinish(); }, MIN_MS);
+
+  setTimeout(()=>{
+    forced = true;
+    hideLoader();
+  }, MAX_MS);
+
+  // если всё супер быстро — всё равно держим минимум
+  mediaAll.catch(()=>{ mediaDone = true; maybeFinish(); });
+}
+
+// стартуем сразу (не ждём load)
+smartLoad();
 </script>
 
 </body>
